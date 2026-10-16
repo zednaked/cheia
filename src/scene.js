@@ -231,7 +231,8 @@ export class View {
   }
 
   // Raio da câmera contra o relevo (CPU, marcha no heightfield).
-  pick(ndcX, ndcY, data) {
+  // surface(k): cota visível da célula k (leito + lâmina exibida)
+  pick(ndcX, ndcY, data, surface = (k) => data.bed[k]) {
     const ray = new THREE.Raycaster();
     ray.setFromCamera({ x: ndcX, y: ndcY }, this.camera);
     const { origin, direction } = ray.ray;
@@ -245,7 +246,8 @@ export class View {
         continue;
       }
       const i = Math.floor(u * data.W), j = Math.floor(v * data.H);
-      if (y <= (data.bed[j * data.W + i] - base) * ex) return { i, j, k: j * data.W + i };
+      const k = j * data.W + i;
+      if (y <= (surface(k) - base) * ex) return { i, j, k };
     }
     return null;
   }

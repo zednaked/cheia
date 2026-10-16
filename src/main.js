@@ -3,6 +3,7 @@ import {
 } from './data.js';
 import { FloodSim } from './sim.js';
 import { View } from './scene.js';
+import { setupScenarios } from './cenarios.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -110,6 +111,23 @@ function reset() {
   readback();
 }
 window.cheia = { sim, view, dem };
+
+setupScenarios({
+  idf,
+  presets: [...$('preset').options].filter((o) => o.value !== 'custom').map((o) => ({ value: o.value, text: o.text })),
+  run({ rate, dur, loss, river }) {
+    const set = (id, v) => { $(id).value = v; $(id).dispatchEvent(new Event('input')); };
+    set('rate', rate);
+    set('dur', dur);
+    set('loss', loss);
+    set('base', river);
+    $('preset').value = 'custom';
+    $('c-max').checked = false;
+    $('c-max').dispatchEvent(new Event('change'));
+    reset();
+    if (!running) $('play').click();
+  },
+});
 $('reset').addEventListener('click', reset);
 $('pits').addEventListener('change', () => {
   prepareBed($('pits').value);
@@ -205,7 +223,12 @@ function updateTip() {
   if (!e) return;
   pickPending = null;
   const r = view.renderer.domElement.getBoundingClientRect();
-  const hit = view.pick(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1, dem);
+  const showMax = view.uniforms.uShowMax.value === 1, minShow = view.uniforms.uMinShow.value;
+  const surface = (k) => {
+    const h = buf ? buf[k * 4 + (showMax ? 1 : 0)] : 0;
+    return dem.bed[k] + (h > minShow ? h : 0);
+  };
+  const hit = view.pick(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1, dem, surface);
   if (!hit) { tip.style.display = 'none'; return; }
   const a = ids[hit.k] ? areas[ids[hit.k] - 1] : null;
   const h = buf ? buf[hit.k * 4] : 0, hm = buf ? buf[hit.k * 4 + 1] : 0, arr = buf ? buf[hit.k * 4 + 2] : 0;

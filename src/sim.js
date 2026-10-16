@@ -58,7 +58,7 @@ void main() {
 }
 `;
 
-// Saída: r = h, g = h máx, b = momento em que passou de 30 cm (s; 0 = nunca), a = leito
+// Saída: r = h, g = h máx, b = momento em que passou de 30 cm (s; 0 = nunca, -1 = já começou assim), a = leito
 const OUTPUT = /* glsl */ `
 precision highp float;
 precision highp sampler2D;
@@ -164,6 +164,7 @@ export class FloodSim {
     for (let k = 0; k < n; k++) {
       const h = h0 ? h0[k] : 0;
       s[k * 4] = o[k * 4] = o[k * 4 + 1] = h;
+      o[k * 4 + 2] = h > 0.3 ? -1 : 0; // já começa acima de 30 cm: sem hora de chegada
       s[k * 4 + 3] = o[k * 4 + 3] = this.bed[k];
     }
     this.upload(s, this.S);

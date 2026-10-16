@@ -4,7 +4,10 @@
 browser tab.** Pick a rainstorm, in mm/h or from Curitiba's own
 intensity-duration-frequency curve, and watch the water run down the real
 terrain, fill the rivers and spill into the neighbourhoods. A live ranking lists
-the neighbourhoods and towns with the most land under water.
+the neighbourhoods and towns with the most land under water. With a strong El
+Niño forming, a second panel puts the next six months of forecast rain and
+heat next to what past El Niños did, and turns a month into starting
+conditions for the flood.
 
 **[Open it](https://zednaked.github.io/cheia/)** · Interface in Portuguese ·
 [Em português](#em-português)
@@ -24,6 +27,76 @@ answer on the map.
 
 ![The interface at the peak of the flood: rain controls, the 3D map and the ranking of affected neighbourhoods](docs/screenshot.webp)
 
+## The next six months
+
+On 8 October 2026 NOAA's Climate Prediction Center kept its El Niño Advisory:
+a strong to very strong event is likely through March 2027, with an 83% chance
+that October to December is the strongest since 1950. In southern Brazil a
+strong El Niño usually means a wet spring and summer, and people in Curitiba
+are asking what that does to their street. So the simulator has a second
+question now: *not "what if it rains 80 mm" but "what will the month around
+that storm look like".*
+
+![The next-months panel: monthly rain in Curitiba, normal range, the 51-member forecast and the past strong El Niños](docs/cenarios.webp)
+
+Three sources, kept apart on purpose:
+
+- **The forecast:** ECMWF SEAS5, 51 members, six months ahead, daily rain and
+  temperature for Curitiba, fetched live from Open-Meteo every time the panel
+  opens.
+- **Normal:** ERA5 reanalysis for the same point, 1991 to 2020.
+- **What strong El Niños actually did:** the October to April months of the
+  six since 1982 (1982, 1991, 1997, 2009, 2015, 2023), from ERA5. That is
+  measurement, not a model, and it is there to check the forecast against.
+
+What it shows today, 16 October 2026:
+
+```
+             normal   forecast median (10-90%)   wet month*   max temp
+Oct 2026     130 mm   327 mm  (258-400)            100%         -1.2 °C
+Nov 2026     128 mm   234 mm  (160-360)             96%         +0.7 °C
+Dec 2026     157 mm   206 mm  (128-325)             71%         +0.5 °C
+Jan 2027     227 mm   206 mm  (124-300)             24%         +1.0 °C
+Feb 2027     177 mm   159 mm   (72-284)             27%         +1.2 °C
+Mar 2027     132 mm   151 mm   (91-241)             53%         +0.7 °C
+
+* share of the 51 members above the wettest third of 1991-2020; 33% in any year
+```
+
+**Read the forecast as too wet.** It is not bias-corrected: the API has no
+hindcasts to correct it with. Over the 26 days to 10 October, where both exist,
+the model gave Curitiba **208 mm** and ERA5 recorded **147 mm**, 42% more. That
+is too short a window to build a correction on, so the panel prints it instead.
+The past El Niños point the same way with no model involved: October in
+Curitiba was above its 1991-2020 median (130 mm) in 5 of the 6, at 157 to
+321 mm; the sixth, 1991, had 129 mm.
+
+**From a month to a flood.** A seasonal forecast can't say which day the
+storm comes. What it can say is what the ground and the rivers will be like
+when it does. Pick a month and a condition (the forecast's median, its wet
+tenth, or "like 1997") and the panel sets the simulation:
+
+- **Soil.** The wettest 5 days of that month give the SCS curve-number
+  antecedent moisture class (dry under 35.6 mm, wet over 53.3 mm), and the
+  infiltration-plus-drains loss scales with the retention of that class: 15
+  mm/h normal, 6.5 mm/h saturated.
+- **Rivers.** The starting water level scales with the month's rain over its
+  normal, from 0.3 to 3 m. This one is a heuristic and the panel says so.
+- **Heat.** Short storms get about 7% more intense per degree of warming
+  (Clausius-Clapeyron). The design storm from Curitiba's IDF curve is scaled by
+  the forecast temperature anomaly.
+
+The same storm (10-year, one hour), read after two simulated hours, area that
+passed 30 cm of water:
+
+```
+normal month                              138 km²
+soil and rivers like November 1997        165 km²   +19%
+the forecast's wet tenth for October      177 km²   +29%
+```
+
+![The November-1997 scenario at its peak over Curitiba's industrial district; hovering shows 50 cm of water that passed 30 cm at 1h22](docs/cenario-cic.webp)
+
 ## What runs in the tab
 
 ```
@@ -34,12 +107,16 @@ rivers, lakes,
 boundaries     OpenStreetMap, pre-fetched,               1.5 MB gzip
                3,041 waterways, 1,302 lakes,
                17 municipalities, 289 neighbourhoods
+climate        ERA5 1981-2026 summaries, pre-fetched,     32 KB gzip
+               SEAS5 seasonal forecast, live,              ~180 KB
 model          local inertial shallow water, one fragment shader per step
 ```
 
 Everything is client-side: no server, no account, no API key. GitHub Pages
 serves the HTML and the OSM file; the terrain and imagery come straight from
 their public tile servers.
+
+![The Iguaçu floodplain and the Belém joining it, south-east of the centre, at the peak of the November-1997 scenario, vertical exaggeration 4×](docs/iguacu.webp)
 
 **The hydraulics** are the local inertial formulation of Bates et al. (2010),
 the one inside LISFLOOD-FP, which is what flood researchers actually use for
@@ -89,6 +166,11 @@ one-hour storm plus its aftermath takes half a minute to watch.
   like detention basins and channelled streams, are not in it.
 - **Uniform rain.** The whole area gets the same storm at the same time. Real
   summer storms in Curitiba are a few kilometres wide.
+- **The seasonal side is one point and not bias-corrected.** Rain and
+  temperature come from the grid cell over central Curitiba, and the forecast
+  ran 42% wet over the only window I could check. The step from a month's rain
+  to soil and river conditions is a standard method for the soil (SCS) and a
+  heuristic for the rivers.
 
 This is an educational and exploratory tool. It does not replace the alerts
 from the Defesa Civil.
@@ -99,6 +181,7 @@ from the Defesa Civil.
 npm install
 npm run dev        # http://localhost:5173
 npm run data       # re-fetch rivers and boundaries from OSM (Overpass)
+node scripts/fetch-climate.mjs   # rebuild the ERA5 summaries and the forecast snapshot
 ```
 
 The area is set in `src/region.js` as a block of web map tiles; another city is
@@ -107,6 +190,9 @@ a change of five numbers and `npm run data`. The GitHub Pages deploy is
 
 ## Credits
 
+Forecast and reanalysis: ECMWF SEAS5 and ERA5 (Copernicus) via
+[Open-Meteo](https://open-meteo.com/). ENSO status: NOAA
+[CPC](https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.html).
 Terrain: [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/)
 (SRTM, NASA/USGS). Imagery: Esri, Maxar, Earthstar Geographics. Rivers and
 boundaries: © [OpenStreetMap](https://www.openstreetmap.org/copyright)
@@ -128,6 +214,12 @@ Um ranking mostra os bairros e municípios com mais área alagada.
 - Passe o mouse para ver bairro, altitude, lâmina d'água agora e no pico, e a
   hora em que a água passou de 30 cm.
 - "Pico da cheia" mostra a mancha máxima da simulação inteira.
+- **Próximos meses (El Niño 2026–27):** chuva e temperatura previstas mês a
+  mês pelo ECMWF (51 membros), comparadas com o normal de 1991 a 2020 e com o
+  que aconteceu nos El Niños fortes desde 1982. Escolha um mês e uma condição
+  ("como em 1997", por exemplo) e o simulador ajusta solo, rios e a força da
+  tempestade antes de rodar. A previsão não tem correção de viés e, no único
+  período que deu para conferir, marcou 42% a mais de chuva que a reanálise.
 
 **Não é previsão e não foi validado contra uma enchente observada.** Serve para
 entender por onde a água escoa e onde ela se acumula primeiro. Em caso de
