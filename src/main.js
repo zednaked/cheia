@@ -211,7 +211,7 @@ function updateTip() {
   const h = buf ? buf[hit.k * 4] : 0, hm = buf ? buf[hit.k * 4 + 1] : 0, arr = buf ? buf[hit.k * 4 + 2] : 0;
   tip.innerHTML = `<b>${a ? a.name : 'fora dos limites'}</b><br>
     Altitude ${dem.bed[hit.k].toFixed(0)} m<br>
-    Água agora ${h < 0.01 ? '—' : (h * 100).toFixed(0) + ' cm'} · pico ${hm < 0.01 ? '—' : (hm * 100).toFixed(0) + ' cm'}
+    Água agora ${h < 0.01 ? '–' : (h * 100).toFixed(0) + ' cm'} · pico ${hm < 0.01 ? '–' : (hm * 100).toFixed(0) + ' cm'}
     ${arr > 0 ? `<br>Passou de 30 cm em ${fmtTime(arr)}` : ''}
     ${riverMask[hit.k] ? '<br><span class="muni">calha de rio</span>' : ''}`;
   tip.style.display = 'block';
