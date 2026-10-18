@@ -71,6 +71,12 @@ answer on the map.
 
 <img src="docs/celular.webp" alt="On a phone: the pin on Rua Alferes Poli, Rebouças, shows the water passed 30 cm after 27 minutes and reached 1.03 m" width="300">
 
+**Videos recorded in the simulator itself** (MP4, 16 to 59 s):
+[100-year storm over Parolin, hazard colours](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
+[the storm of 18 Feb 2025 over Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
+[10-year storm, the whole city](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
+[storm cell over downtown](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
+
 ## Checked against a real storm
 
 On Tuesday 18 February 2025 a heavy storm hit Curitiba between late morning and

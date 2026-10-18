@@ -75,6 +75,12 @@ resposta no mapa.
 
 <img src="docs/celular.webp" alt="No celular: o pino na Rua Alferes Poli, no Rebouças, mostra que a água passou de 30 cm com 27 minutos e chegou a 1,03 m" width="300">
 
+**Vídeos gravados no próprio simulador** (MP4, 16 a 59 s):
+[chuva extrema no Parolin, cor por perigo](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
+[temporal de 18/02/2025 no Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
+[temporal de 10 anos, a cidade toda](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
+[célula de tempestade sobre o centro](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
+
 ## Conferido com um temporal de verdade
 
 Na terça-feira, 18 de fevereiro de 2025, choveu forte em Curitiba entre o fim da
