@@ -345,6 +345,23 @@ segundo**: uma chuva de uma hora e tudo que vem depois cabem em meio minuto.
 os alertas da Defesa Civil.** Em caso de chuva forte, ligue 199 e cadastre-se
 nos alertas por SMS mandando seu CEP para 40199.
 
+## Meta: relatos de moradores
+
+Hoje o Cheia simula; ele não sabe o que está acontecendo na rua agora. A
+próxima meta é deixar quem mora na região contar: *aqui tem água, mais ou
+menos esta altura, a esta hora*, com foto opcional. Esses relatos serviriam
+para duas coisas:
+
+1. **Mostrar alagamentos acontecendo**, no mapa, junto com o que o modelo
+   espera para a chuva daquele momento.
+2. **Calibrar o modelo** com muito mais pontos do que os 18 de 2025, o que é
+   o caminho para acertar melhor os rios que transbordam.
+
+Isso ainda não existe. Precisa de um servidor para receber os relatos,
+moderação e proteção contra relatos falsos, cuidado com a privacidade (LGPD)
+e chuva observada ao vivo no lugar da prevista. Acompanhe ou contribua na
+[issue do GitHub](https://github.com/zednaked/cheia/issues/1).
+
 ## Rodar localmente
 
 ```sh

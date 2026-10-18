@@ -310,6 +310,23 @@ one-hour storm plus its aftermath takes half a minute to watch.
 This is an educational and exploratory tool. It does not replace the alerts
 from the Defesa Civil.
 
+## Goal: reports from residents
+
+Today Cheia simulates; it doesn't know what is happening on the street right
+now. The next goal is to let people who live there report it: *there is water
+here, about this deep, at this time*, with an optional photo. Those reports
+would do two things:
+
+1. **Show floods as they happen**, on the map, next to what the model expects
+   from the rain at that moment.
+2. **Calibrate the model** with far more points than the 18 from 2025, which
+   is the way to get the overflowing rivers right.
+
+None of this exists yet. It needs a server to receive reports, moderation and
+protection against false ones, care with privacy (Brazil's LGPD) and observed
+rain fed in live instead of forecast rain. Follow or help in the
+[GitHub issue](https://github.com/zednaked/cheia/issues/1).
+
 ## Run it
 
 ```sh
