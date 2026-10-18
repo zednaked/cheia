@@ -62,7 +62,10 @@ answer on the map.
   the current.
 - **Count what matters.** How many schools and day-care centres, hospitals and
   clinics, fire and police stations the water reached, how many kilometres of
-  street passed 30 cm and how many became unsafe for cars.
+  street passed 30 cm and how many became unsafe for cars. A 10-year,
+  one-hour storm, two hours in: 503 km of street above 30 cm (66 km of them
+  main roads), 519 km unsafe for cars, 90 schools and day-care centres and
+  48 health sites with water at the door.
 
 ![Hazard colouring in a 100-year storm over Parolin and Guaíra: yellow is shallow, orange sweeps a small car, wine is unsafe for anyone; the white streaks are the current](docs/perigo.webp)
 
@@ -193,15 +196,15 @@ start.
 ```
 grid           1536 × 1536 cells, 34.5 m each, 53 × 53 km
 terrain        SRTM 30 m (AWS Terrain Tiles), rivers
-               burned and pits treated at build time,   2.2 MB gzip
+               burned and pits treated at build time,   2.8 MB gzip
 imagery        Esri World Imagery, 576 tiles,            9.8 MB
 rivers, lakes,
 boundaries     OpenStreetMap, pre-fetched,               1.5 MB gzip
                3,041 waterways, 1,302 lakes,
                17 municipalities, 289 neighbourhoods,
                1,716 schools, health and emergency sites
-streets        OSM road network, summarised per cell
-               inside the terrain file
+streets        OSM road network, 51,129 ways, 13,640 km,
+               summarised per cell inside the terrain file
 climate        ERA5 1981-2026 summaries, pre-fetched,     32 KB gzip
                SEAS5 seasonal forecast, live,              ~180 KB
 model          local inertial shallow water, one fragment shader per step

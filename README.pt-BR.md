@@ -62,7 +62,10 @@ resposta no mapa.
   Riscos brancos mostram a correnteza.
 - **Contar o que importa.** Quantas escolas e creches, hospitais e postos,
   bombeiros e delegacias a água alcançou, quantos quilômetros de rua passaram
-  de 30 cm e quantos ficaram perigosos para carro.
+  de 30 cm e quantos ficaram perigosos para carro. Numa chuva de 10 anos e
+  uma hora, duas horas depois: 503 km de rua acima de 30 cm (66 km de vias
+  principais), 519 km perigosos para carro, 90 escolas e creches e 48
+  unidades de saúde com água na porta.
 - **Ajustar a cidade.** Quanto o solo e as galerias absorvem, o nível inicial
   dos rios, a rugosidade do terreno.
 - **Abrir "Próximos meses"** e rodar a enchente com o solo e os rios de um mês
@@ -223,15 +226,15 @@ diferença ali era o rio de 2,1 m transbordando no começo.
 ```
 grade          1536 × 1536 células de 34,5 m, 53 × 53 km
 relevo         SRTM 30 m (AWS Terrain Tiles), com rios
-               queimados e depressões tratadas no build,  2,2 MB gzip
+               queimados e depressões tratadas no build,  2,8 MB gzip
 imagem         Esri World Imagery, 576 tiles,             9,8 MB
 rios, lagos,
 limites        OpenStreetMap, baixado antes,              1,5 MB gzip
                3.041 cursos d'água, 1.302 lagos,
                17 municípios, 289 bairros,
                1.716 escolas, unidades de saúde e de socorro
-ruas           malha viária do OSM, resumida por célula
-               dentro do arquivo do relevo
+ruas           malha viária do OSM, 51.129 vias, 13.640 km,
+               resumida por célula dentro do arquivo do relevo
 clima          resumos do ERA5 1981-2026, baixados antes,  32 KB gzip
                previsão sazonal SEAS5, ao vivo,             ~180 KB
 modelo         água rasa inercial local, um fragment shader por passo
