@@ -2,35 +2,10 @@
 // da região e grava public/data/osm.json, servido junto com o site.
 import { writeFile } from 'node:fs/promises';
 import { bbox } from '../src/region.js';
+import { overpass } from './overpass.mjs';
 
-const MIRRORS = [
-  'https://overpass-api.de/api/interpreter',
-  'https://overpass.private.coffee/api/interpreter',
-  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
-];
 const b = bbox();
 const bb = `${b.south},${b.west},${b.north},${b.east}`;
-
-async function overpass(q) {
-  let wait = 5000;
-  for (let attempt = 0; attempt < 9; attempt++) {
-    const url = MIRRORS[attempt % MIRRORS.length];
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': 'cheia/0.1' },
-        body: 'data=' + encodeURIComponent(q),
-      });
-      if (res.ok) return await res.json();
-      console.log(`  ${new URL(url).host}: ${res.status}`);
-    } catch (e) {
-      console.log(`  ${new URL(url).host}: ${e.message}`);
-    }
-    await new Promise((r) => setTimeout(r, wait));
-    wait = Math.min(wait * 2, 60000);
-  }
-  throw new Error('Overpass indisponível');
-}
 
 const r5 = (v) => Math.round(v * 1e5) / 1e5;
 const pts = (geom) => geom.map((p) => [r5(p.lon), r5(p.lat)]);
@@ -96,7 +71,31 @@ const areas = adm.elements
   }))
   .filter((a) => a.rings.length);
 
-const out = { bbox: b, fetched: new Date().toISOString(), rivers, lakes, areas };
+// Lugares que importam numa cheia: onde estão crianças, doentes e o socorro.
+console.log('escolas, saúde e socorro…');
+const POI_KIND = {
+  school: 'escola', kindergarten: 'creche', college: 'escola', university: 'escola',
+  hospital: 'hospital', clinic: 'saúde', doctors: 'saúde',
+  fire_station: 'bombeiros', police: 'polícia', nursing_home: 'asilo', social_facility: 'asilo',
+};
+const poiRes = await overpass(`[out:json][timeout:180];
+(nwr["amenity"~"^(${Object.keys(POI_KIND).join('|')})$"](${bb}););
+out center tags;`);
+const seen = new Set();
+const pois = [];
+for (const e of poiRes.elements) {
+  const lon = e.lon ?? e.center?.lon, lat = e.lat ?? e.center?.lat;
+  const a = e.tags?.amenity;
+  if (lon == null || !POI_KIND[a]) continue;
+  if (a === 'social_facility' && !/senior|elder|idos/i.test(e.tags['social_facility:for'] || e.tags.social_facility || '')) continue;
+  const key = `${a}${e.tags.name || ''}${r5(lon).toFixed(3)}${r5(lat).toFixed(3)}`;
+  if (seen.has(key)) continue;
+  seen.add(key);
+  pois.push({ n: e.tags.name || '', k: POI_KIND[a], c: [r5(lon), r5(lat)] });
+}
+
+const out = { bbox: b, fetched: new Date().toISOString(), rivers, lakes, areas, pois };
 await writeFile(new URL('../public/data/osm.json', import.meta.url), JSON.stringify(out));
 console.log(`ok: ${rivers.length} rios, ${lakes.length} lagos, ${areas.length} áreas ` +
-  `(${areas.filter((a) => a.l === 8).length} municípios, ${areas.filter((a) => a.l === 10).length} bairros)`);
+  `(${areas.filter((a) => a.l === 8).length} municípios, ${areas.filter((a) => a.l === 10).length} bairros), ` +
+  `${pois.length} lugares`);

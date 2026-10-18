@@ -45,3 +45,8 @@ export function lonLatToUV(lon, lat, r = REGION) {
     (lat2ty(lat, r.z) - r.y0) / r.ny,
   ];
 }
+
+// coordenada fracionária [0,1] -> lon/lat
+export function uvToLonLat(u, v, r = REGION) {
+  return [tile2lon(r.x0 + u * r.nx, r.z), tile2lat(r.y0 + v * r.ny, r.z)];
+}

@@ -49,6 +49,52 @@ export async function loadElevation(progress) {
   return { W, H, bed, dx: cellSize() };
 }
 
+// Terreno pré-processado por scripts/bake-terrain.mjs (ver o formato lá).
+// Devolve null se o arquivo não existir (aí o relevo vem dos tiles, ao vivo).
+export async function loadTerrain(progress) {
+  try {
+    return await decodeTerrain(progress);
+  } catch (e) {
+    console.warn('terreno pré-processado indisponível, montando a partir dos tiles:', e.message);
+    return null;
+  }
+}
+
+async function decodeTerrain(progress) {
+  const res = await fetch(`${import.meta.env.BASE_URL}data/terreno.bin.gz`);
+  if (!res.ok || !res.body) return null;
+  const total = +res.headers.get('content-length') || 0;
+  let got = 0;
+  const counted = res.body.pipeThrough(new TransformStream({
+    transform(chunk, ctl) {
+      got += chunk.length;
+      if (total) progress(Math.min(1, got / total));
+      ctl.enqueue(chunk);
+    },
+  }));
+  let buf = new Uint8Array(await new Response(counted).arrayBuffer());
+  // servidores que já descompactam (Content-Encoding) entregam o binário cru
+  if (buf[0] === 0x1f && buf[1] === 0x8b) {
+    buf = new Uint8Array(await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+  }
+  const [W, H, Q] = new Int32Array(buf.buffer, 0, 3);
+  const n = W * H;
+  // um servidor que devolve o index.html no lugar do arquivo cai aqui
+  if (W !== REGION.nx * 256 || H !== REGION.ny * 256 || buf.length !== 12 + 11 * n) throw new Error('arquivo inválido');
+  const delta = new Int32Array(buf.buffer, 12, n), fill = new Int32Array(buf.buffer, 12 + 4 * n, n);
+  let o = 12 + 8 * n;
+  const u8 = () => { const a = buf.slice(o, o + n); o += n; return a; };
+  const riverMask = u8(), roads = u8(), roadsMain = u8();
+  const burned = new Float32Array(n), filled = new Float32Array(n);
+  let z = 0;
+  for (let k = 0; k < n; k++) {
+    z = k % W ? z + delta[k] : delta[k];
+    burned[k] = z / Q;
+    filled[k] = (z + fill[k]) / Q;
+  }
+  return { W, H, dx: cellSize(), burned, filled, riverMask, roads, roadsMain };
+}
+
 export async function loadImagery(maxSize, progress) {
   const r = REGION;
   const f = 2 ** (r.imageryZ - r.z);
@@ -128,27 +174,64 @@ export function drawLimits(osm, size) {
   return c;
 }
 
+// Escolas, saúde e socorro: pontos pequenos, cor por tipo.
+const POI_COLOR = { escola: '#ffd166', creche: '#ffd166', hospital: '#ff5c7a', 'saúde': '#ff5c7a', bombeiros: '#ff8a3a', 'polícia': '#9ad1ff', asilo: '#c9a7ff' };
+export function drawPois(pois, size) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const r = Math.max(2, size / 1100);
+  for (const p of pois) {
+    const [u, v] = lonLatToUV(...p.c);
+    ctx.beginPath();
+    ctx.arc(u * size, v * size, r, 0, Math.PI * 2);
+    ctx.fillStyle = POI_COLOR[p.k] || '#fff';
+    ctx.fill();
+    ctx.lineWidth = r * 0.45;
+    ctx.strokeStyle = 'rgba(10,14,20,0.9)';
+    ctx.stroke();
+  }
+  return c;
+}
+
+// Preenche polígonos (regra par-ímpar) por linha de varredura, no centro de
+// cada célula. Sem antialiasing: no canvas, a borda de um bairro misturava a
+// cor-código dele com a do vizinho e saía o código de um terceiro bairro.
+function scanFill(rings, W, H, set) {
+  const rows = new Map();
+  for (const ring of rings) {
+    const pts = ring.map(([lon, lat]) => {
+      const [u, v] = lonLatToUV(lon, lat);
+      return [u * W, v * H];
+    });
+    for (let i = 0; i < pts.length; i++) {
+      const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
+      if (y0 === y1) continue;
+      const lo = Math.max(0, Math.ceil(Math.min(y0, y1) - 0.5)), hi = Math.min(H - 1, Math.ceil(Math.max(y0, y1) - 0.5) - 1);
+      for (let j = lo; j <= hi; j++) {
+        const y = j + 0.5;
+        const x = x0 + ((y - y0) * (x1 - x0)) / (y1 - y0);
+        if (!rows.has(j)) rows.set(j, []);
+        rows.get(j).push(x);
+      }
+    }
+  }
+  for (const [j, xs] of rows) {
+    xs.sort((a, b) => a - b);
+    for (let n = 0; n + 1 < xs.length; n += 2) {
+      const i0 = Math.max(0, Math.ceil(xs[n] - 0.5)), i1 = Math.min(W - 1, Math.ceil(xs[n + 1] - 0.5) - 1);
+      for (let i = i0; i <= i1; i++) set(j * W + i);
+    }
+  }
+}
+
 // Mapa célula -> índice da área (bairro onde há bairro, senão município).
 export function rasterizeAreas(osm, W, H) {
   const list = [...osm.areas.filter((a) => a.l === 8), ...osm.areas.filter((a) => a.l === 10)];
-  const c = new OffscreenCanvas(W, H);
-  const ctx = c.getContext('2d', { willReadFrequently: true });
-  ctx.imageSmoothingEnabled = false;
-  list.forEach((a, i) => {
-    const id = i + 1;
-    ctx.fillStyle = `rgb(${id & 255},${id >> 8},0)`;
-    ctx.beginPath();
-    for (const ring of a.rings) tracePath(ctx, ring, W, H);
-    ctx.fill('evenodd');
-  });
-  const px = ctx.getImageData(0, 0, W, H).data;
   const ids = new Uint16Array(W * H);
-  for (let k = 0; k < W * H; k++) {
-    // Bordas com antialiasing misturam cores; só aceita pixels opacos.
-    if (px[k * 4 + 3] === 255) ids[k] = px[k * 4] | (px[k * 4 + 1] << 8);
-  }
-  const areas = list.map((a) => ({ name: a.n, level: a.l, municipio: null, cells: 0 }));
-  for (let k = 0; k < W * H; k++) if (ids[k] && ids[k] <= areas.length) areas[ids[k] - 1].cells++;
+  list.forEach((a, i) => scanFill(a.rings, W, H, (k) => (ids[k] = i + 1)));
+  const areas = list.map((a) => ({ name: a.n, level: a.l, cells: 0 }));
+  for (let k = 0; k < W * H; k++) if (ids[k]) areas[ids[k] - 1].cells++;
   return { ids, areas };
 }
 

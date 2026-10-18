@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "data": "node scripts/fetch-osm.mjs"
+    "data": "node scripts/fetch-osm.mjs && node scripts/fetch-ruas.mjs && node scripts/bake-terrain.mjs",
+    "bake": "node scripts/bake-terrain.mjs",
+    "test": "node test/run.mjs"
   },
   "dependencies": {
     "three": "^0.186.1"

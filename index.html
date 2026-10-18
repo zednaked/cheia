@@ -8,7 +8,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://zednaked.github.io/cheia/" />
   <meta property="og:title" content="Cheia · simulador de enchentes de Curitiba e RMC" />
-  <meta property="og:description" content="Escolha uma chuva e veja por onde a água desce no relevo real de Curitiba. Com os cenários do El Niño 2026–27. Roda no navegador." />
+  <meta property="og:description" content="Busque a sua rua e veja a que horas a água chega. Solte uma tempestade, reviva o temporal de 18/02/2025 ou rode as próximas 48 h, no relevo real de Curitiba. Roda no navegador." />
   <meta property="og:image" content="https://zednaked.github.io/cheia/og.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -105,10 +105,75 @@
     table.num th { color: var(--dim); font-weight: 500; text-align: right; padding: 3px 4px; }
     table.num td { text-align: right; padding: 3px 4px; cursor: default; }
     table.num th:first-child, table.num td:first-child { text-align: left; }
+    /* busca */
+    .search { position: relative; margin-top: 10px; }
+    .search input { width: 100%; font: inherit; color: var(--fg); background: #1b2430; border: 1px solid var(--line);
+      border-radius: 6px; padding: 7px 9px; }
+    .search input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    #search-res { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 6; padding: 4px; max-height: 260px; overflow-y: auto; }
+    #search-res button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 6px 8px; border-radius: 5px; }
+    #search-res button:hover, #search-res button.on { background: #1b2430; }
+    #search-res .muni { color: var(--dim); font-size: 11px; }
+    /* modos */
+    .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .modes button { font-size: 12px; padding: 6px 6px; }
+    .modes .scen-btn { grid-column: 1 / -1; margin-top: 0; }
+    .mode-on { margin-top: 8px; padding: 7px 9px; border-radius: 6px; background: #12263a; border: 1px solid #1f4a72; font-size: 12px; }
+    .mode-on button { margin-top: 6px; font-size: 12px; padding: 3px 8px; }
+    .seg { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin: 6px 0; }
+    .seg button { flex: 1; border: 0; border-radius: 0; background: #1b2430; font-size: 12px; padding: 5px 4px; }
+    .seg button[aria-pressed=true] { background: var(--accent); color: #04121f; font-weight: 600; }
+    #cell-opts[hidden] { display: none; }
+    .arm { width: 100%; margin-top: 4px; }
+    .arm[aria-pressed=true] { background: #2a1d10; border-color: var(--warn); color: #ffd2b8; }
+    /* ranking com abas */
+    .tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+    .tabs button { flex: 1; font-size: 12px; padding: 4px; }
+    .tabs button[aria-pressed=true] { border-color: var(--accent); color: var(--accent); }
+    .expo { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-variant-numeric: tabular-nums; margin-top: 6px; }
+    .expo dt { color: var(--dim); } .expo dd { margin: 0; text-align: right; }
+    .expo dd b { color: var(--warn); }
+    .hit { color: #6fdc8c; } .miss { color: #ff8a7a; }
+    /* ficha do ponto */
+    #ponto { left: 324px; bottom: 12px; width: 300px; padding: 10px 12px; }
+    #ponto header { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+    #ponto h3 { margin: 0; font-size: 14px; }
+    #ponto .x { background: none; border: 0; color: var(--dim); padding: 0 2px; font-size: 15px; }
+    #ponto .big { font-size: 13.5px; margin: 6px 0 4px; line-height: 1.45; }
+    #ponto .big b { color: var(--accent); }
+    #ponto svg { width: 100%; height: 64px; display: block; }
+    #ponto .tools { display: flex; gap: 6px; margin-top: 6px; }
+    #ponto .tools button { font-size: 12px; padding: 3px 8px; }
+    .marker { position: fixed; width: 18px; height: 18px; margin: -18px 0 0 -9px; pointer-events: none; z-index: 2; }
+    .marker::before { content: ''; position: absolute; inset: 0; background: var(--warn); border: 2px solid #fff;
+      border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 6px #000a; }
+    .vpin { position: fixed; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; border: 1.5px solid #fff;
+      z-index: 2; cursor: pointer; box-shadow: 0 1px 4px #000c; }
+    .vpin.hit { background: #2fbf5a; } .vpin.miss { background: #e2483a; } .vpin.wait { background: #8b98a8; }
+    /* compartilhar */
+    .share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .share button { font-size: 12px; padding: 6px 4px; }
+    #rec[aria-pressed=true] { background: #5a1414; border-color: #e2483a; }
+    #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 8px 14px; z-index: 20; max-width: calc(100% - 24px); overflow-wrap: anywhere; user-select: all; }
+    .legend-haz { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; }
+    .legend-haz span { height: 10px; border-radius: 2px; }
+    .legend-haz-lbl { display: grid; grid-template-columns: repeat(6, 1fr); color: var(--dim); font-size: 10.5px; text-align: center; }
+    #panel-toggle, #rank-toggle { display: none; }
     @media (max-width: 760px) {
       .builder { grid-template-columns: 1fr; }
-      #controls { width: calc(100% - 24px); max-height: 45%; }
-      #ranking, #legend { display: none; }
+      #controls { top: auto; bottom: 0; left: 0; width: 100%; max-height: 62%; border-radius: 12px 12px 0 0; padding-top: 6px; }
+      #controls.collapsed > :not(.always) { display: none; }
+      #panel-toggle { display: block; width: 100%; background: none; border: 0; color: var(--dim); padding: 2px 0 6px; font-size: 12px; }
+      #panel-toggle::before { content: ''; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 0 auto 4px; }
+      #ranking { top: 8px; right: 8px; left: 8px; width: auto; max-height: 45%; }
+      #ranking.collapsed > :not(.always) { display: none; }
+      #ranking.collapsed { padding: 6px 10px; }
+      #rank-toggle { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 0; font-weight: 600; }
+      #ranking > h2.desk { display: none; }
+      #legend { left: 8px; right: auto; width: 180px; bottom: auto; top: 56px; padding: 6px 8px; }
+      #ponto { left: 8px; right: 8px; width: auto; bottom: auto; top: 56px; z-index: 4; }
+      #tip { display: none !important; }
+      body.has-pin #legend { display: none; }
     }
   </style>
 </head>
@@ -122,9 +187,25 @@
   </div></div>
 
   <div id="controls" class="panel">
-    <h1><b>Cheia</b> · simulador de enchentes</h1>
-    <div class="sub">Curitiba e Região Metropolitana · relevo SRTM 30 m</div>
-    <button id="open-scen" class="scen-btn">☔ Próximos meses: El Niño 2026–27</button>
+    <button id="panel-toggle" class="always" aria-expanded="true">controles</button>
+    <div class="always">
+      <h1><b>Cheia</b> · simulador de enchentes</h1>
+      <div class="sub">Curitiba e Região Metropolitana · relevo SRTM 30 m</div>
+      <div class="search">
+        <input id="search" type="search" placeholder="Buscar bairro, escola, rua…" autocomplete="off" aria-label="Buscar lugar" />
+        <div id="search-res" class="panel" hidden></div>
+      </div>
+      <div class="buttons" style="margin-top:8px">
+        <button id="play" class="primary">▶ Simular</button>
+        <button id="reset">↺ Reiniciar</button>
+      </div>
+    </div>
+    <div class="modes">
+      <button id="open-scen" class="scen-btn">☔ Próximos meses: El Niño 2026–27</button>
+      <button id="mode-event" title="Chuva medida nos pluviômetros da Defesa Civil, com os alagamentos reportados">⛈ Reviver 18/02/2025</button>
+      <button id="mode-fc" title="Chuva prevista hora a hora pelo Open-Meteo em 16 pontos da região">🕑 Próximas 48 h</button>
+    </div>
+    <div id="mode-on" class="mode-on" hidden></div>
 
     <h2>Chuva</h2>
     <label class="row">Cenário
@@ -143,6 +224,24 @@
     <label class="row">Duração <output id="o-dur"></output>
       <input id="dur" type="range" min="0.25" max="72" step="0.25" value="1" /></label>
     <div class="note">Total: <b id="o-total"></b>. Cenários pela curva IDF de Curitiba (Fendrich).</div>
+    <div class="seg" role="group" aria-label="Onde chove">
+      <button id="where-all" aria-pressed="true">Em toda a região</button>
+      <button id="where-cell" aria-pressed="false">Célula de tempestade</button>
+    </div>
+    <div id="cell-opts" hidden>
+      <button id="cell-arm" class="arm" aria-pressed="false">📍 Clique no mapa para soltar a tempestade</button>
+      <label class="row">Raio da célula <output id="o-cr"></output>
+        <input id="cr" type="range" min="1" max="15" step="0.5" value="5" /></label>
+      <label class="row">Vento leva a célula para <output id="o-cs"></output>
+        <select id="cd" style="grid-column:1/-1">
+          <option value="-1">parada</option>
+          <option value="0">norte</option><option value="45">nordeste</option><option value="90" selected>leste</option>
+          <option value="135">sudeste</option><option value="180">sul</option><option value="225">sudoeste</option>
+          <option value="270">oeste</option><option value="315">noroeste</option>
+        </select>
+        <input id="cs" type="range" min="0" max="60" step="5" value="20" /></label>
+      <div class="note">A célula despeja a intensidade acima no centro, caindo para 37% na borda do raio.</div>
+    </div>
 
     <h2>Solo e cidade</h2>
     <label class="row">Perdas (infiltração + galerias) <output id="o-loss"></output>
@@ -161,13 +260,9 @@
 
     <h2>Simulação</h2>
     <div id="clock">00:00</div>
-    <div class="sub">tempo simulado · chovendo <span id="rain-now">0</span> mm/h</div>
+    <div class="sub"><span id="clock-sub">tempo simulado</span> · chovendo <span id="rain-now">0</span> mm/h</div>
     <label class="row">Velocidade <output id="o-speed"></output>
       <input id="speed" type="range" min="1" max="80" step="1" value="40" /></label>
-    <div class="buttons">
-      <button id="play" class="primary">▶ Simular</button>
-      <button id="reset">↺ Reiniciar</button>
-    </div>
     <dl class="stats" style="margin-top:10px">
       <dt>Área alagada agora (&gt;30 cm)</dt><dd id="s-area">–</dd>
       <dt>Área máxima alagada</dt><dd id="s-max">–</dd>
@@ -180,11 +275,24 @@
       <label><input type="checkbox" id="c-riv" checked /> Rios</label>
       <label><input type="checkbox" id="c-lim" checked /> Limites</label>
       <label><input type="checkbox" id="c-max" /> Pico da cheia</label>
+      <label><input type="checkbox" id="c-flow" checked /> Correnteza</label>
+      <label><input type="checkbox" id="c-poi" /> Escolas e saúde</label>
+    </div>
+    <div class="seg" role="group" aria-label="Cor da água">
+      <button id="cm-depth" aria-pressed="true">Profundidade</button>
+      <button id="cm-haz" aria-pressed="false">Perigo</button>
     </div>
     <label class="row">Exagero vertical <output id="o-exag"></output>
       <input id="exag" type="range" min="1" max="10" step="0.5" value="2.5" /></label>
     <label class="row">Lâmina mínima exibida <output id="o-min"></output>
       <input id="minshow" type="range" min="0.01" max="0.5" step="0.01" value="0.1" /></label>
+
+    <h2>Compartilhar</h2>
+    <div class="share">
+      <button id="share-link" title="Copia um link que abre este cenário, com a câmera e o pino">🔗 Link</button>
+      <button id="share-img" title="Baixa uma imagem do mapa">📷 Imagem</button>
+      <button id="rec" aria-pressed="false" title="Grava um vídeo do mapa">⏺ Vídeo</button>
+    </div>
 
     <div class="credits">
       Modelo inercial local (Bates et al. 2010, LISFLOOD-FP) em GPU. Relevo:
@@ -196,16 +304,45 @@
   </div>
 
   <div id="ranking" class="panel">
-    <h2 style="margin-top:0">Mais afetados</h2>
-    <div class="sub" id="rank-sub">Rode a simulação para ver os bairros e municípios com mais área alagada.</div>
-    <table id="rank"></table>
+    <button id="rank-toggle" class="always" aria-expanded="false">▾ Mais afetados</button>
+    <h2 class="desk" style="margin-top:0">Mais afetados</h2>
+    <div class="tabs" role="group">
+      <button data-tab="bairros" aria-pressed="true">Bairros</button>
+      <button data-tab="lugares" aria-pressed="false">Lugares</button>
+      <button data-tab="valid" aria-pressed="false" hidden>Validação</button>
+    </div>
+    <div data-pane="bairros">
+      <div class="sub" id="rank-sub">Rode a simulação para ver os bairros e municípios com mais área alagada.</div>
+      <table id="rank"></table>
+    </div>
+    <div data-pane="lugares" hidden>
+      <div class="sub">Pico até agora. Escolas, creches, hospitais, postos e socorro do OpenStreetMap; ruas pela malha viária do OSM.</div>
+      <dl class="expo" id="expo"></dl>
+      <table id="poi-rank" style="margin-top:8px"></table>
+    </div>
+    <div data-pane="valid" hidden id="valid"></div>
   </div>
 
   <div id="legend" class="panel">
-    <div class="sub" style="margin-bottom:4px">Profundidade da água</div>
-    <div class="grad"></div>
-    <div class="ticks"><span>5 cm</span><span>50 cm</span><span>1 m</span><span>2 m</span><span>4 m+</span></div>
+    <div id="leg-depth">
+      <div class="sub" style="margin-bottom:4px">Profundidade da água</div>
+      <div class="grad"></div>
+      <div class="ticks"><span>5 cm</span><span>50 cm</span><span>1 m</span><span>2 m</span><span>4 m+</span></div>
+    </div>
+    <div id="leg-haz" hidden>
+      <div class="sub" style="margin-bottom:4px">Perigo (profundidade × velocidade, ARR 2019)</div>
+      <div class="legend-haz">
+        <span style="background:#fadb59"></span><span style="background:#faa633"></span><span style="background:#ed661f"></span>
+        <span style="background:#d1261f"></span><span style="background:#8c0d33"></span><span style="background:#4d0040"></span>
+      </div>
+      <div class="legend-haz-lbl"><span>seguro</span><span>carro</span><span>criança</span><span>adulto</span><span>casas</span><span>tudo</span></div>
+    </div>
   </div>
+
+  <div id="ponto" class="panel" hidden></div>
+  <div id="marker" class="marker" hidden></div>
+  <div id="vpins"></div>
+  <div id="toast" class="panel" hidden></div>
 
   <div id="tip" class="panel"></div>
 

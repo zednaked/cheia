@@ -1,0 +1,53 @@
+{
+  "id": "2025-02-18",
+  "label": "Temporal de 18 de fevereiro de 2025",
+  "summary": "Até 69 mm em cerca de 3 horas no Portão; 22,8 mm em 15 minutos por volta do meio-dia (Simepar). Chuva concentrada no centro e no oeste; quase nada no extremo sul.",
+  "start": "11:30",
+  "slotMin": 15,
+  "shape": [0.06, 0.14, 0.38, 0.08, 0.06, 0.05, 0.05, 0.04, 0.04, 0.03, 0.03, 0.02, 0.01, 0.01],
+  "shapeNote": "Forma da chuva no tempo montada a partir do Simepar: 34,6 mm até 12h15 e 22,8 mm nos 15 minutos de pico, de um total de cerca de 60 mm; a chuva diminuiu por volta das 15h.",
+  "stationsNote": "Totais do dia nos pluviômetros da Defesa Civil de Curitiba. A posição de cada pluviômetro é o centro do bairro que dá nome à estação, não o endereço exato.",
+  "stations": [
+    { "n": "Portão", "mm": 68.8, "c": [-49.3022, -25.4769] },
+    { "n": "Córrego Bigorrilho", "mm": 55.0, "c": [-49.3017, -25.4310] },
+    { "n": "Matriz (Centro)", "mm": 49.0, "c": [-49.2715, -25.4320] },
+    { "n": "Boqueirão", "mm": 48.2, "c": [-49.2335, -25.5138] },
+    { "n": "Cajuru", "mm": 42.8, "c": [-49.2091, -25.4536] },
+    { "n": "CIC", "mm": 41.8, "c": [-49.3283, -25.5134] },
+    { "n": "Vilinha (Bairro Alto)", "mm": 40.2, "c": [-49.2091, -25.4203] },
+    { "n": "Alto da XV", "mm": 38.2, "c": [-49.2549, -25.4331] },
+    { "n": "Pinheirinho", "mm": 37.0, "c": [-49.2875, -25.5271] },
+    { "n": "Bairro Novo (Sítio Cercado)", "mm": 36.6, "c": [-49.2704, -25.5399] },
+    { "n": "Santa Felicidade", "mm": 23.8, "c": [-49.3257, -25.3955] },
+    { "n": "Boa Vista", "mm": 22.8, "c": [-49.2486, -25.3860] },
+    { "n": "Caximba", "mm": 5.1, "c": [-49.3516, -25.6257] },
+    { "n": "Tatuquara", "mm": 4.6, "c": [-49.3190, -25.5651] }
+  ],
+  "sources": [
+    "https://www.bemparana.com.br/curitiba/em-18-dias-curitiba-bate-media-historica-de-chuva-para-fevereiro/",
+    "https://www.band.com.br/band-parana/noticias/alagamentos-em-curitiba-202502181529",
+    "https://www.bandab.com.br/curitiba/quatro-pessoas-ilhadas-resgatadas-casa-parolin-chuva-forte/",
+    "https://www.bandab.com.br/curitiba/efeito-domino-muro-residencia-desaba-apos-forte-chuva-e-destroi-duas-casas-campo-comprido-video/"
+  ],
+  "pointsNote": "Pontos 1 a 15: lista de alagamentos da Defesa Civil reproduzida pelo Bem Paraná. 16 a 18: Banda B. São relatos de alagamento, não medidas de profundidade. Posições geocodificadas pelo OSM; Henry Ford, José Hauer x Salgado Filho e Humberto Cantarelli têm erro de algumas centenas de metros.",
+  "points": [
+    { "n": "R. Alferes Poli x R. Almirante Gonçalves", "b": "Rebouças", "c": [-49.26794, -25.44826] },
+    { "n": "R. Ângelo Zeni x R. Carlos Pioli", "b": "Bom Retiro", "c": [-49.27873, -25.41176] },
+    { "n": "R. Visconde de Nácar x R. Saldanha Marinho", "b": "Centro", "c": [-49.27867, -25.43116] },
+    { "n": "R. Arnaldo Rudnick", "b": "Novo Mundo", "c": [-49.31071, -25.48431] },
+    { "n": "R. Marialva", "b": "Sítio Cercado", "c": [-49.28784, -25.54411] },
+    { "n": "R. Emílio Nichele", "b": "CIC", "c": [-49.33546, -25.49947] },
+    { "n": "R. Bandeirantes, 520", "b": "Sítio Cercado", "c": [-49.2869, -25.54379] },
+    { "n": "R. Dr. Luiz Losso Filho", "b": "Novo Mundo", "c": [-49.31119, -25.48637] },
+    { "n": "R. Waldemar Cavanha x R. Raul Pompéia", "b": "Fazendinha", "c": [-49.33212, -25.47786] },
+    { "n": "Parque Mané Garrincha", "b": "CIC", "c": [-49.33771, -25.51198] },
+    { "n": "R. Aristóteles da Silva Santos (Rio Belém)", "b": "Boqueirão", "c": [-49.22654, -25.49617] },
+    { "n": "R. Carlos Essenfelder x R. Cleto da Silva", "b": "Boqueirão", "c": [-49.23704, -25.48557] },
+    { "n": "Av. Wenceslau Braz x Linha Verde", "b": "Parolin", "c": [-49.2551, -25.47006] },
+    { "n": "R. José Hauer x Av. Salgado Filho", "b": "Uberaba", "c": [-49.2178, -25.49746] },
+    { "n": "Córrego Henry Ford", "b": "Fanny", "c": [-49.27175, -25.47914] },
+    { "n": "R. Prof. Porthos Velozo", "b": "Parolin", "c": [-49.26468, -25.46671] },
+    { "n": "R. Brigadeiro Franco", "b": "Parolin", "c": [-49.26467, -25.46557] },
+    { "n": "R. Humberto Cantarelli", "b": "Campo Comprido", "c": [-49.32467, -25.45735] }
+  ]
+}

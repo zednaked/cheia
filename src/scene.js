@@ -3,12 +3,14 @@
 // são combinados no fragment shader.
 import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/MapControls.js';
+import { HAZARD_GLSL } from './sim.js';
 
 // position = (coluna, linha, saia) da célula; a posição no mundo sai do shader.
 const VERT = /* glsl */ `
 precision highp float;
 precision highp sampler2D;
-uniform sampler2D uOut;      // (h, h máx, chegada, leito)
+uniform sampler2D uOut;      // (h, h máx, chegada, perigo máx.)
+uniform sampler2D uS;        // estado: (h, q leste, q sul, leito)
 uniform ivec2 uN;
 uniform vec2 uSize;
 uniform float uDx, uExag, uBase, uMinShow;
@@ -16,9 +18,10 @@ uniform int uShowMax;
 varying vec2 vUv;
 varying vec3 vNormal;
 float surf(ivec2 p) {
-  vec4 o = texelFetch(uOut, clamp(p, ivec2(0), uN - 1), 0);
+  p = clamp(p, ivec2(0), uN - 1);
+  vec4 o = texelFetch(uOut, p, 0);
   float h = uShowMax == 1 ? o.g : o.r;
-  return o.a + (h > uMinShow ? h : 0.0);
+  return texelFetch(uS, p, 0).a + (h > uMinShow ? h : 0.0);
 }
 void main() {
   ivec2 p = ivec2(position.xy);
@@ -34,12 +37,26 @@ void main() {
 
 const FRAG = /* glsl */ `
 precision highp float;
-uniform sampler2D uImg, uRivers, uLimits, uOut;
-uniform float uShowImg, uShowRivers, uShowLimits, uMinShow;
-uniform int uShowMax;
+precision highp sampler2D;
+uniform sampler2D uImg, uRivers, uLimits, uPois, uOut, uS;
+uniform float uShowImg, uShowRivers, uShowLimits, uShowPois, uMinShow;
+uniform int uShowMax, uColorMode;
+uniform ivec2 uN;
 uniform vec3 uSun;
+uniform vec4 uCellRing;      // centro (uv), raio (uv), ligado
+uniform float uTime;
 varying vec2 vUv;
 varying vec3 vNormal;
+${HAZARD_GLSL}
+vec3 hazardColor(float c) {
+  // H1 … H6, do amarelo ao vinho
+  if (c < 1.5) return vec3(0.98, 0.86, 0.35);
+  if (c < 2.5) return vec3(0.98, 0.65, 0.2);
+  if (c < 3.5) return vec3(0.93, 0.4, 0.12);
+  if (c < 4.5) return vec3(0.82, 0.15, 0.12);
+  if (c < 5.5) return vec3(0.55, 0.05, 0.2);
+  return vec3(0.3, 0.0, 0.25);
+}
 vec3 depthColor(float d) {
   // 0,1 m  claro -> 0,5 m -> 1 m -> 2 m -> 4 m+ escuro
   vec3 c = mix(vec3(0.55, 0.9, 1.0), vec3(0.15, 0.6, 1.0), smoothstep(0.05, 0.5, d));
@@ -61,12 +78,29 @@ void main() {
   float vDepth = uShowMax == 1 ? o.g : o.r;
   if (vDepth > uMinShow) {
     float a = smoothstep(uMinShow, uMinShow + 0.25, vDepth) * 0.88;
-    vec3 w = depthColor(vDepth) * (0.65 + 0.45 * diff);
+    vec3 w;
+    if (uColorMode == 1) {
+      ivec2 p = clamp(ivec2(vUv * vec2(uN)), ivec2(0), uN - 1);
+      float hz = uShowMax == 1 ? texelFetch(uOut, p, 0).a
+        : hazard(texelFetch(uS, p, 0).r, length(cellVel(uS, p, uN)));
+      w = hazardColor(max(hz, 1.0)) * (0.7 + 0.4 * diff);
+    } else w = depthColor(vDepth) * (0.65 + 0.45 * diff);
     w += pow(max(dot(reflect(-uSun, n), vec3(0.0, 1.0, 0.0)), 0.0), 40.0) * 0.25;
     col = mix(col, w, a);
   }
   vec4 l = texture2D(uLimits, vUv);
   col = mix(col, l.rgb, l.a * uShowLimits);
+  vec4 pp = texture2D(uPois, vUv);
+  col = mix(col, pp.rgb, pp.a * uShowPois);
+  // célula de tempestade: véu escuro e anel tracejado girando
+  if (uCellRing.w > 0.0) {
+    float d = length(vUv - uCellRing.xy) / uCellRing.z;
+    col *= 1.0 - 0.28 * exp(-d * d);
+    float ring = smoothstep(0.03, 0.0, abs(d - 1.0));
+    float ang = atan(vUv.y - uCellRing.y, vUv.x - uCellRing.x);
+    ring *= step(0.0, sin(ang * 24.0 + uTime * 2.0));
+    col = mix(col, vec3(0.75, 0.85, 1.0), ring * 0.8);
+  }
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -146,12 +180,16 @@ export class View {
     this.camera.updateProjectionMatrix();
   }
 
-  build({ W, H, dx, bed }, sim, imagery, rivers, limits) {
+  build({ W, H, dx, bed }, sim, imagery, rivers, limits, pois) {
     let min = Infinity;
     for (const z of bed) if (z < min && z > -100) min = z;
     this.size = { W: W * dx, H: H * dx };
     this.uniforms = {
       uOut: { value: sim.outputTex },
+      uS: { value: sim.stateTex },
+      uColorMode: { value: 0 },
+      uCellRing: { value: new THREE.Vector4() },
+      uTime: { value: 0 },
       uN: { value: new THREE.Vector2(W, H) },
       uSize: { value: new THREE.Vector2(this.size.W, this.size.H) },
       uDx: { value: dx },
@@ -165,6 +203,8 @@ export class View {
       uShowImg: { value: 1 },
       uShowRivers: { value: 1 },
       uShowLimits: { value: 1 },
+      uPois: { value: canvasTex(pois, this.renderer) },
+      uShowPois: { value: 0 },
       uSun: { value: new THREE.Vector3(-0.5, 0.8, -0.35).normalize() },
     };
     const material = new THREE.ShaderMaterial({
@@ -225,6 +265,25 @@ export class View {
     }
   }
 
+  // Voo suave da câmera até um ponto da grade, mantendo a direção de visada.
+  flyTo(u, v, z, dist = 6000) {
+    const p = this.gridToWorld(u, v, z);
+    const off = this.camera.position.clone().sub(this.controls.target).setLength(dist);
+    this.flight = {
+      t0: performance.now(), dur: 1200,
+      fromT: this.controls.target.clone(), fromP: this.camera.position.clone(),
+      toT: p, toP: p.clone().add(off),
+    };
+  }
+
+  // Posição na tela (px CSS) de um ponto da grade; null se atrás da câmera.
+  project(u, v, z) {
+    const p = this.gridToWorld(u, v, z).project(this.camera);
+    if (p.z > 1) return null;
+    const r = this.renderer.domElement.getBoundingClientRect();
+    return { x: r.left + ((p.x + 1) / 2) * r.width, y: r.top + ((1 - p.y) / 2) * r.height };
+  }
+
   // Coordenada de grade (fracionária) -> posição no mundo
   gridToWorld(u, v, z = 0) {
     return new THREE.Vector3((u - 0.5) * this.size.W, (z - this.uniforms.uBase.value) * this.uniforms.uExag.value, (v - 0.5) * this.size.H);
@@ -253,6 +312,17 @@ export class View {
   }
 
   render() {
+    const f = this.flight;
+    if (f) {
+      const k = Math.min(1, (performance.now() - f.t0) / f.dur), e = k < 0.5 ? 4 * k ** 3 : 1 - (-2 * k + 2) ** 3 / 2;
+      this.controls.target.lerpVectors(f.fromT, f.toT, e);
+      this.camera.position.lerpVectors(f.fromP, f.toP, e);
+      if (k === 1) {
+        this.flight = null;
+        this.onFlightEnd?.();
+      }
+    }
+    this.uniforms.uTime.value = performance.now() / 1000;
     this.controls.update();
     this.updateLOD();
     this.renderer.render(this.scene, this.camera);
