@@ -19,7 +19,14 @@ instalar nada · [English](README.md)
 2,4 milhões de células de água, uma passada de shader por passo, 5,9 ms
 temporal de 18/02/2025: a simulação alagou 9 dos 18 pontos reportados
                         (por sorte, com a mesma régua, seriam uns 4)
+chuva de 2 anos (a de todo verão): 1,78 m na Wenceslau Braz x Linha Verde
 ```
+
+**Nesta página:** [o que a simulação encontrou](#o-que-a-simulação-encontrou) ·
+[o que dá para fazer](#o-que-dá-para-fazer) ·
+[conferido com um temporal de verdade](#conferido-com-um-temporal-de-verdade) ·
+[próximos seis meses](#os-próximos-seis-meses) · [métodos](#métodos) ·
+[o que ele não enxerga](#o-que-ele-não-enxerga)
 
 ![Uma chuva de 100 anos, de uma hora, sobre Curitiba, em duas horas simuladas](docs/cheia.webp)
 
@@ -36,6 +43,132 @@ você perguntar *"e se chover 80 mm em uma hora, para onde vai a água?"* e ver 
 resposta no mapa.
 
 ![A interface no pico da cheia: controles de chuva, o mapa 3D e o ranking dos bairros afetados](docs/screenshot.webp)
+
+## O que a simulação encontrou
+
+Rodei as chuvas de projeto de Curitiba (2, 10 e 100 anos de retorno em uma
+hora, e 25 anos em três horas) sobre a região inteira e medi três coisas: a
+água nos 18 pontos que alagaram de verdade em 18/02/2025, a fração de cada
+bairro que passou de 30 cm, e quais escolas, creches, unidades de saúde e ruas
+ficaram com água perigosa. Como foi feito está em [Métodos](#métodos); os
+números completos, em [`docs/analise.json`](docs/analise.json).
+
+**1. O Parolin, o Fanny e o Novo Mundo alagam até com a chuva de todo verão.**
+Uma chuva de 2 anos de retorno (52 mm em uma hora) já põe 1,78 m de água no
+cruzamento da Wenceslau Braz com a Linha Verde, 1,39 m no Córrego Henry Ford
+e 1,27 m na Rua Dr. Luiz Losso Filho, onde a água passa de 30 cm em 5 minutos.
+Nos três, a correnteza já é perigosa para qualquer pessoa. São fundos de vale
+para onde corre a água de vários bairros.
+
+![Chuva de 2 anos sobre o Parolin e o Fanny, uma hora e meia depois: a Linha Verde e o Córrego Henry Ford em vermelho, perigosos para pessoas](docs/chuva-comum.webp)
+
+**2. O pior vem depois que a chuva para.** Nos vales maiores, o pico chega de
+30 minutos a quase 2 horas depois do começo da chuva, quando a água da bacia
+inteira chega ao rio. No Boqueirão (Carlos Essenfelder x Cleto da Silva) a
+água só passa de 30 cm 1h53 depois, numa chuva de 100 anos.
+
+**3. Intensidade pesa mais que volume.** A chuva de 25 anos em três horas
+(mais água no total) deu menos água em quase todos os pontos do que a de 10
+anos em uma hora. Em Curitiba, o perigo é a pancada curta e forte.
+
+**4. Seis dos 18 pontos reportados ficam secos em qualquer chuva.** Sítio
+Cercado (2), CIC (2), Fazendinha e Campo Comprido não passam de 5 cm nem na
+chuva de 100 anos, e o Centro (Visconde de Nácar) não passa de 12 cm. Esses
+alagamentos são de drenagem: boca de lobo entupida, galeria pequena, rua plana
+sem saída. Um relevo de 30 m não enxerga isso, e o modelo não deve ser usado
+para dizer que esses lugares são seguros.
+
+**5. Os bairros com a maior parte da área alagada ficam fora de Curitiba.** Na
+chuva de 10 anos, Alto Tarumã (15%), Parque das Águas (14%) e Jardim Claudia
+(11%), em Pinhais, Agaraú (14%), em São José dos Pinhais, e Guaraituba (13%),
+em Colombo, estão nas várzeas do Iraí, do Palmital, do Atuba e do alto Iguaçu.
+Em Curitiba, os primeiros são Alto da Rua XV, Augusta, Hugo Lange e Santo
+Inácio (8 a 10%); em parte é várzea e parque do Belém e do Barigui, feitos
+para encher.
+
+### Os 18 pontos de 18/02/2025, em quatro chuvas
+
+Pico da lâmina num quadrado de 3 × 3 células (uns 100 m) em volta do ponto;
+entre parênteses, quanto tempo depois do início da chuva passou de 30 cm; H é a
+classe de perigo no pico.
+
+```
+                                         2 anos, 1 h       10 anos, 1 h      25 anos, 3 h      100 anos, 1 h
+Parolin     Wenceslau Braz x Linha Verde 1,78 m (36′) H5   2,32 m (31′) H5   2,12 m (63′) H5   3,14 m (21′) H6
+Fanny       Córrego Henry Ford           1,39 m (31′) H4   1,82 m (26′) H5   1,32 m (47′) H4   2,44 m (21′) H5
+Novo Mundo  Dr. Luiz Losso Filho         1,27 m  (5′) H4   1,68 m  (5′) H4   1,36 m (16′) H4   2,31 m  (5′) H5
+Parolin     Prof. Porthos Velozo         58 cm  (72′) H3   78 cm  (57′) H4   61 cm (105′) H3   1,06 m (42′) H5
+Rebouças    Alferes Poli x A. Gonçalves  52 cm  (51′) H3   69 cm  (42′) H3   62 cm  (74′) H3   1,03 m (32′) H3
+Novo Mundo  Arnaldo Rudnick              31 cm  (93′) H2   68 cm  (62′) H3   38 cm (135′) H2   1,30 m (47′) H4
+Bom Retiro  Ângelo Zeni x Carlos Pioli   31 cm  (51′) H2   41 cm  (42′) H4   24 cm        H1   65 cm  (32′) H5
+Uberaba     José Hauer x Salgado Filho   25 cm        H1   33 cm  (57′) H2   26 cm        H1   46 cm  (37′) H2
+Boqueirão   Carlos Essenfelder x Cleto   11 cm        H1   13 cm        H1    8 cm        H1   1,16 m (113′) H3
+Parolin     Brigadeiro Franco             2 cm        H0    3 cm        H0    2 cm        H0   33 cm  (68′) H2
+Centro      Visconde de Nácar x Saldanha  8 cm        H1   10 cm        H1    6 cm        H1   12 cm        H1
+Boqueirão   Aristóteles da Silva Santos   2 cm        H0    2 cm        H0    2 cm        H0    3 cm        H0
+CIC         Parque Mané Garrincha         3 cm        H0    4 cm        H0    3 cm        H0    5 cm        H1
+CIC, Sítio Cercado (2), Fazendinha,
+Campo Comprido                           até 3 cm em todas as chuvas
+
+H1 raso · H2 arrasta carro pequeno · H3 perigoso para criança e idoso · H4 para qualquer pessoa
+H5 construções leves sofrem · H6 qualquer construção pode ceder
+```
+
+### Onde a água chega primeiro a quem mais precisa
+
+Para ordenar os bairros por relevância social, contei, na chuva de 10 anos, os
+serviços essenciais com mais de 30 cm de água na porta, com peso pelo quanto a
+população depende deles numa emergência (hospital e asilo 5, unidade de saúde
+e creche 3, escola e bombeiros 2, polícia 1), e somei os quilômetros de rua
+onde a água passa a arrastar carro (H2 ou mais). É uma régua simples e
+explícita, não um índice oficial; falta, por exemplo, a renda e a densidade de
+moradores, que ainda não estão no simulador.
+
+```
+    bairro                        o que fica com mais de 30 cm na porta                  ruas H2+
+ 1  CIC                           UPA CIC, US Taiz Viviane Machado, 2 escolas            21 km
+ 2  Boqueirão                     4 unidades de saúde (US Irmã Tereza Araújo, CAPS,      7 km
+                                  US Tapajós, UPA Boqueirão), 4 escolas, PM
+ 3  Cajuru                        EM Senador Enéas Faria (1,57 m)                       15 km
+ 4  Eucaliptos (Faz. Rio Grande)  US Hortência, EM Alcides Pelanda, CE Lucy Requião     9 km
+                                  (todos com cerca de 1 m)
+ 5  Xaxim                         EM Jardim Europa (1,25 m), US Esmeralda, US São Pedro  5 km
+ 6  Guaraituba (Colombo)          EM Angelo Falavinha Dalprá (1,03 m), CMEI Tia Itamara  7 km
+ 7  Centro                        Colégio Estadual do Paraná (1,25 m), 3 escolas         1 km
+ 8  Palmital (Colombo)            CMEI Generosa Simões (1,45 m), 2 escolas               5 km
+ 9  Sítio Cercado                 EM e CMEI Parigot de Souza (1,30 m), EM José Cavallin  5 km
+10  Uberaba                       CE Conselheiro Carrão, EM Michel Khury                 8 km
+```
+
+A posição de cada escola e unidade de saúde vem do OpenStreetMap e o relevo
+tem células de 34 m: leia "a água chega à quadra dessa escola", não "entra na
+sala de aula".
+
+### Vídeos
+
+Gravados no próprio simulador, com a cor por perigo. Em ordem de prioridade
+social, chuva de 10 anos:
+[1 CIC](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/01-cic.mp4) ·
+[2 Boqueirão](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/02-boqueirao.mp4) ·
+[3 Cajuru](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/03-cajuru.mp4) ·
+[4 Eucaliptos, Fazenda Rio Grande](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/04-eucaliptos-fazenda-rio-grande.mp4) ·
+[5 Xaxim](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/05-xaxim.mp4) ·
+[6 Guaraituba, Colombo](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/06-guaraituba-colombo.mp4) ·
+[7 Centro](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/07-centro.mp4) ·
+[8 Palmital, Colombo](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/08-palmital-colombo.mp4)
+
+Pontos críticos:
+[Parolin e Fanny numa chuva de 2 anos](https://github.com/zednaked/cheia/raw/main/docs/videos/parolin-fanny-chuva-comum.mp4) ·
+[Novo Mundo, 10 anos](https://github.com/zednaked/cheia/raw/main/docs/videos/novo-mundo-temporal.mp4) ·
+[Rebouças, 10 anos](https://github.com/zednaked/cheia/raw/main/docs/videos/reboucas-temporal.mp4) ·
+[Pinhais, 10 anos](https://github.com/zednaked/cheia/raw/main/docs/videos/pinhais-temporal.mp4) ·
+[Boqueirão, 100 anos](https://github.com/zednaked/cheia/raw/main/docs/videos/boqueirao-extrema.mp4)
+
+A cidade e os eventos:
+[chuva extrema no Parolin](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
+[temporal de 18/02/2025 no Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
+[temporal de 10 anos, a cidade toda](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
+[célula de tempestade sobre o centro](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
 
 ## O que dá para fazer
 
@@ -74,12 +207,6 @@ resposta no mapa.
 ![Cor por perigo numa chuva de 100 anos sobre o Parolin e o Guaíra: amarelo é raso, laranja derruba carro pequeno, vinho é perigoso para qualquer pessoa; os riscos brancos são a correnteza](docs/perigo.webp)
 
 <img src="docs/celular.webp" alt="No celular: o pino na Rua Alferes Poli, no Rebouças, mostra que a água passou de 30 cm com 27 minutos e chegou a 1,03 m" width="300">
-
-**Vídeos gravados no próprio simulador** (MP4, 16 a 59 s):
-[chuva extrema no Parolin, cor por perigo](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
-[temporal de 18/02/2025 no Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
-[temporal de 10 anos, a cidade toda](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
-[célula de tempestade sobre o centro](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
 
 ## Conferido com um temporal de verdade
 
@@ -227,7 +354,9 @@ diferença ali era o rio de 2,1 m transbordando no começo.
 
 ![O cenário de novembro de 1997 no pico, sobre a Cidade Industrial; o mouse mostra 50 cm de água, que passou de 30 cm à 1h22](docs/cenario-cic.webp)
 
-## O que roda na aba
+## Métodos
+
+### Dados
 
 ```
 grade          1536 × 1536 células de 34,5 m, 53 × 53 km
@@ -253,7 +382,9 @@ vem direto dos servidores públicos de tiles e fica guardada no navegador
 
 ![A várzea do Iguaçu e o Belém chegando nele, a sudeste do centro, no pico do cenário de novembro de 1997, relevo exagerado 4×](docs/iguacu.webp)
 
-**A hidráulica** é a formulação inercial local de Bates et al. (2010), a mesma
+### Hidráulica
+
+A hidráulica é a formulação inercial local de Bates et al. (2010), a mesma
 que está dentro do LISFLOOD-FP, que é o que os pesquisadores de inundação usam
 de fato. Profundidade da água em cada célula, vazão em cada face, atrito de
 Manning, passo de tempo que se ajusta à água mais funda (CFL), bordas abertas.
@@ -263,7 +394,67 @@ grade grossa (pluviômetros, previsão) e uma célula de tempestade gaussiana qu
 anda. A velocidade em cada célula sai das vazões das faces, e com ela a classe
 de perigo.
 
-**Os testes** (`npm test`) rodam o modelo na GPU, num Chromium headless, em
+### Preparação do relevo
+
+Rios do OSM gravados no relevo com cota que só desce (até 10 m de corte);
+represas falsas do SRTM abertas até 5 m e o resto preenchido com inclinação
+mínima (priority-flood, Barnes et al. 2014); antes de cada simulação, os rios
+assentam por duas horas sem chuva, e o que já estava molhado no começo não
+conta como alagamento. Os detalhes e o porquê estão em [Cinco
+coisas](#cinco-coisas-que-precisei-consertar-antes-de-a-água-ir-para-onde-a-água-vai).
+
+### Chuva
+
+- **Chuvas de projeto:** equação IDF de Curitiba (Fendrich), intensidade
+  constante durante a duração escolhida, igual na região inteira.
+- **Perda:** infiltração mais galerias, uma taxa em mm/h descontada da chuva
+  em cada célula.
+- **Evento de 2025:** 14 pluviômetros, inverso do quadrado da distância numa
+  grade de 32 × 32, distribuídos no tempo em blocos de 15 minutos pelo
+  hietograma do Simepar.
+- **Previsão de 48 h:** Open-Meteo, 16 pontos (4 × 4) com chuva por hora,
+  interpolados do mesmo jeito.
+- **Célula de tempestade:** sino gaussiano com raio, velocidade e direção
+  escolhidos.
+
+### Perigo e exposição
+
+- **Classe de perigo:** ARR 2019 (Austrália), de H1 a H6, pela profundidade,
+  pela velocidade e pelo produto das duas; guarda-se a maior classe de cada
+  célula ao longo da simulação.
+- **Alagado:** passou de 30 cm em algum momento, fora da calha dos rios e dos
+  lagos e fora do que já estava molhado antes da chuva.
+- **Lugares:** 1.716 escolas, creches, unidades de saúde, hospitais, asilos,
+  bombeiros e polícia do OSM; conta se o pico passou de 30 cm em alguma das
+  9 células em volta (o ponto do OSM costuma cair no telhado).
+- **Ruas:** a malha viária do OSM (51.129 vias) vira metros de rua por célula
+  no build; somam-se as células alagadas e as de perigo H2 ou mais.
+
+### Análise dos pontos e dos bairros
+
+[`scripts/analise-pontos.mjs`](scripts/analise-pontos.mjs) abre o simulador
+num Chromium sem tela, na GPU, e roda quatro chuvas (2, 10 e 100 anos em uma
+hora, 25 anos em três horas), cada uma até duas horas depois de a chuva parar.
+A cada 5 minutos simulados lê a lâmina nos 18 pontos de 2025 (máximo num
+quadrado de 3 × 3 células, fora do que já estava molhado). No fim, soma por
+bairro a área que passou de 30 cm, os km de rua e os lugares atingidos, e
+calcula a prioridade social descrita acima. Bairros com menos de 0,5 km²
+dentro da grade ficam de fora da fração. O município de cada bairro é o que
+contém o centroide do seu polígono. Rodar de novo:
+
+```sh
+node scripts/analise-pontos.mjs   # sobe o próprio servidor; ~6 min, grava docs/analise.json
+```
+
+### Validação
+
+Descrita em [Conferido com um temporal de
+verdade](#conferido-com-um-temporal-de-verdade): 18 pontos, quadrado de 9 × 9
+células, 20 cm, comparado com o acaso.
+
+### Testes
+
+Os testes (`npm test`) rodam o modelo na GPU, num Chromium headless, em
 grades pequenas feitas à mão: a água que entra numa bacia fechada tem que estar
 toda lá no fim (erro abaixo de 0,01%), um lago parado tem que continuar
 parado, a lâmina nunca fica negativa nem vira NaN num relevo áspero com chuva
@@ -376,6 +567,7 @@ npm test           # testes do modelo na GPU (Chromium headless)
 npm run dev        # http://localhost:5173
 npm run data       # baixa de novo do OSM rios, limites, escolas e ruas, e refaz o relevo
 npm run bake       # só refaz o relevo (public/data/terreno.bin.gz)
+npm run analise    # roda as quatro chuvas e refaz docs/analise.json (~6 min, GPU)
 node scripts/fetch-climate.mjs   # refaz os resumos do ERA5 e a foto da previsão
 ```
 

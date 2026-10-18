@@ -377,7 +377,7 @@ function togglePlay() {
   running = !running;
   $('play').textContent = running ? '❚❚ Pausar' : '▶ Simular';
 }
-window.cheia = { sim, view, dem, get validation() { return validation?.last; }, get running() { return running; }, get pin() { return pin; }, ids, areas };
+window.cheia = { sim, view, dem, get validation() { return validation?.last; }, get running() { return running; }, get pin() { return pin; }, ids, areas, pois, riverMask, roads, roadsMain };
 
 setupScenarios({
   idf,

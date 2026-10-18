@@ -20,7 +20,14 @@ Interface in Portuguese · [Leia em português](README.pt-BR.md)
 81 fps on an integrated laptop GPU, 4 simulated minutes per second
 storm of 18 Feb 2025: the model flooded 9 of the 18 reported spots
                       (by chance, with the same yardstick, about 4)
+2-year storm (the every-summer one): 1.78 m at Wenceslau Braz x Linha Verde
 ```
+
+**On this page:** [what the simulation found](#what-the-simulation-found) ·
+[what you can do](#what-you-can-do) ·
+[checked against a real storm](#checked-against-a-real-storm) ·
+[the next six months](#the-next-six-months) · [methods](#methods) ·
+[what it can't see](#what-it-cant-see)
 
 ![A 100-year, one-hour storm over Curitiba, two simulated hours](docs/cheia.webp)
 
@@ -36,6 +43,131 @@ Researchers have mapped flood risk for single basins. Nothing let you ask
 answer on the map.
 
 ![The interface at the peak of the flood: rain controls, the 3D map and the ranking of affected neighbourhoods](docs/screenshot.webp)
+
+## What the simulation found
+
+I ran Curitiba's design storms (2-, 10- and 100-year one-hour storms, and a
+25-year three-hour one) over the whole region and measured three things: the
+water at the 18 spots that actually flooded on 18 Feb 2025, the share of each
+neighbourhood that passed 30 cm, and which schools, day-care centres, health
+units and streets got dangerous water. How it was done is under
+[Methods](#methods); the full numbers are in [`docs/analise.json`](docs/analise.json).
+
+**1. Parolin, Fanny and Novo Mundo flood even in the every-summer storm.** A
+2-year storm (52 mm in one hour) already puts 1.78 m of water at the Wenceslau
+Braz x Linha Verde junction, 1.39 m on the Henry Ford stream and 1.27 m on Rua
+Dr. Luiz Losso Filho, where water passes 30 cm within 5 minutes. At all three
+the current is already unsafe for anyone. They are valley bottoms that collect
+the water of several neighbourhoods.
+
+![A 2-year storm over Parolin and Fanny, an hour and a half in: Linha Verde and the Henry Ford stream in red, unsafe for people](docs/chuva-comum.webp)
+
+**2. The worst comes after the rain stops.** In the bigger valleys the peak
+arrives 30 minutes to almost 2 hours after the rain starts, when the whole
+basin's water reaches the river. In Boqueirão (Carlos Essenfelder x Cleto da
+Silva) water passes 30 cm only 1h53 in, in a 100-year storm.
+
+**3. Intensity matters more than volume.** The 25-year three-hour storm (more
+water in total) put less water on almost every spot than the 10-year one-hour
+storm. In Curitiba the danger is the short, heavy downpour.
+
+**4. Six of the 18 reported spots stay dry in any storm.** Sítio Cercado (2),
+CIC (2), Fazendinha and Campo Comprido never pass 5 cm even in the 100-year
+storm, and the centre (Visconde de Nácar) never passes 12 cm. Those floods are
+drainage failures: blocked drains, undersized galleries, flat streets with
+nowhere to go. 30 m terrain can't see that, and the model must not be used to
+call those places safe.
+
+**5. The neighbourhoods with the largest share under water are outside
+Curitiba.** In the 10-year storm, Alto Tarumã (15%), Parque das Águas (14%) and
+Jardim Claudia (11%) in Pinhais, Agaraú (14%) in São José dos Pinhais and
+Guaraituba (13%) in Colombo sit on the floodplains of the Iraí, Palmital, Atuba
+and upper Iguaçu. Inside Curitiba the top ones are Alto da Rua XV, Augusta,
+Hugo Lange and Santo Inácio (8 to 10%), partly the Belém and Barigui
+floodplains and parks, which are meant to fill.
+
+### The 18 spots of 18 Feb 2025, in four storms
+
+Peak depth in a 3 × 3 cell box (about 100 m) around the spot; in brackets, how
+long after the rain started it passed 30 cm; H is the hazard class at the peak.
+
+```
+                                         2-yr, 1 h         10-yr, 1 h        25-yr, 3 h        100-yr, 1 h
+Parolin     Wenceslau Braz x Linha Verde 1.78 m (36′) H5   2.32 m (31′) H5   2.12 m (63′) H5   3.14 m (21′) H6
+Fanny       Henry Ford stream            1.39 m (31′) H4   1.82 m (26′) H5   1.32 m (47′) H4   2.44 m (21′) H5
+Novo Mundo  Dr. Luiz Losso Filho         1.27 m  (5′) H4   1.68 m  (5′) H4   1.36 m (16′) H4   2.31 m  (5′) H5
+Parolin     Prof. Porthos Velozo         58 cm  (72′) H3   78 cm  (57′) H4   61 cm (105′) H3   1.06 m (42′) H5
+Rebouças    Alferes Poli x A. Gonçalves  52 cm  (51′) H3   69 cm  (42′) H3   62 cm  (74′) H3   1.03 m (32′) H3
+Novo Mundo  Arnaldo Rudnick              31 cm  (93′) H2   68 cm  (62′) H3   38 cm (135′) H2   1.30 m (47′) H4
+Bom Retiro  Ângelo Zeni x Carlos Pioli   31 cm  (51′) H2   41 cm  (42′) H4   24 cm        H1   65 cm  (32′) H5
+Uberaba     José Hauer x Salgado Filho   25 cm        H1   33 cm  (57′) H2   26 cm        H1   46 cm  (37′) H2
+Boqueirão   Carlos Essenfelder x Cleto   11 cm        H1   13 cm        H1    8 cm        H1   1.16 m (113′) H3
+Parolin     Brigadeiro Franco             2 cm        H0    3 cm        H0    2 cm        H0   33 cm  (68′) H2
+Centro      Visconde de Nácar x Saldanha  8 cm        H1   10 cm        H1    6 cm        H1   12 cm        H1
+Boqueirão   Aristóteles da Silva Santos   2 cm        H0    2 cm        H0    2 cm        H0    3 cm        H0
+CIC         Mané Garrincha park           3 cm        H0    4 cm        H0    3 cm        H0    5 cm        H1
+CIC, Sítio Cercado (2), Fazendinha,
+Campo Comprido                           up to 3 cm in every storm
+
+H1 shallow · H2 sweeps a small car · H3 unsafe for children and the elderly · H4 unsafe for anyone
+H5 light buildings at risk · H6 any building may fail
+```
+
+### Where the water reaches those who need help most
+
+To rank neighbourhoods by social relevance I counted, in the 10-year storm, the
+essential services with more than 30 cm of water at the door, weighted by how
+much people depend on them in an emergency (hospital and care home 5, health
+unit and day-care 3, school and fire station 2, police 1), and added the
+kilometres of street where water starts sweeping cars (H2 or worse). It is a
+simple, explicit yardstick, not an official index; income and population
+density, for one, are not in the simulator yet.
+
+```
+    neighbourhood                 what gets more than 30 cm at the door                  H2+ streets
+ 1  CIC                           UPA CIC emergency unit, Taiz Viviane Machado health    21 km
+                                  unit, 2 schools
+ 2  Boqueirão                     4 health units (Irmã Tereza Araújo, CAPS, Tapajós,      7 km
+                                  UPA Boqueirão), 4 schools, military police
+ 3  Cajuru                        Senador Enéas Faria school (1.57 m)                    15 km
+ 4  Eucaliptos (Faz. Rio Grande)  Hortência health unit and 2 schools (about 1 m)        9 km
+ 5  Xaxim                         Jardim Europa school (1.25 m), 2 health units          5 km
+ 6  Guaraituba (Colombo)          Angelo Falavinha Dalprá school (1.03 m), a day-care    7 km
+ 7  Centro                        Colégio Estadual do Paraná (1.25 m), 3 schools          1 km
+ 8  Palmital (Colombo)            Generosa Simões day-care (1.45 m), 2 schools           5 km
+ 9  Sítio Cercado                 Parigot de Souza school and day-care (1.30 m)          5 km
+10  Uberaba                       Conselheiro Carrão and Michel Khury schools            8 km
+```
+
+Each school and clinic position comes from OpenStreetMap and the terrain has
+34 m cells: read "water reaches that school's block", not "water enters the
+classroom".
+
+### Videos
+
+Recorded in the simulator itself, coloured by hazard. In order of social
+priority, 10-year storm:
+[1 CIC](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/01-cic.mp4) ·
+[2 Boqueirão](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/02-boqueirao.mp4) ·
+[3 Cajuru](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/03-cajuru.mp4) ·
+[4 Eucaliptos, Fazenda Rio Grande](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/04-eucaliptos-fazenda-rio-grande.mp4) ·
+[5 Xaxim](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/05-xaxim.mp4) ·
+[6 Guaraituba, Colombo](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/06-guaraituba-colombo.mp4) ·
+[7 Centro](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/07-centro.mp4) ·
+[8 Palmital, Colombo](https://github.com/zednaked/cheia/raw/main/docs/videos/prioridade/08-palmital-colombo.mp4)
+
+Critical spots:
+[Parolin and Fanny in a 2-year storm](https://github.com/zednaked/cheia/raw/main/docs/videos/parolin-fanny-chuva-comum.mp4) ·
+[Novo Mundo, 10-year](https://github.com/zednaked/cheia/raw/main/docs/videos/novo-mundo-temporal.mp4) ·
+[Rebouças, 10-year](https://github.com/zednaked/cheia/raw/main/docs/videos/reboucas-temporal.mp4) ·
+[Pinhais, 10-year](https://github.com/zednaked/cheia/raw/main/docs/videos/pinhais-temporal.mp4) ·
+[Boqueirão, 100-year](https://github.com/zednaked/cheia/raw/main/docs/videos/boqueirao-extrema.mp4)
+
+The city and the events:
+[100-year storm over Parolin](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
+[the storm of 18 Feb 2025 over Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
+[10-year storm, the whole city](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
+[storm cell over downtown](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
 
 ## What you can do
 
@@ -70,12 +202,6 @@ answer on the map.
 ![Hazard colouring in a 100-year storm over Parolin and Guaíra: yellow is shallow, orange sweeps a small car, wine is unsafe for anyone; the white streaks are the current](docs/perigo.webp)
 
 <img src="docs/celular.webp" alt="On a phone: the pin on Rua Alferes Poli, Rebouças, shows the water passed 30 cm after 27 minutes and reached 1.03 m" width="300">
-
-**Videos recorded in the simulator itself** (MP4, 16 to 59 s):
-[100-year storm over Parolin, hazard colours](https://github.com/zednaked/cheia/raw/main/docs/videos/extrema-perigo-parolin.mp4) ·
-[the storm of 18 Feb 2025 over Portão](https://github.com/zednaked/cheia/raw/main/docs/videos/evento-18-fev-2025.mp4) ·
-[10-year storm, the whole city](https://github.com/zednaked/cheia/raw/main/docs/videos/temporal-10-anos.mp4) ·
-[storm cell over downtown](https://github.com/zednaked/cheia/raw/main/docs/videos/celula-tempestade-centro.mp4)
 
 ## Checked against a real storm
 
@@ -197,7 +323,9 @@ start.
 
 ![The November-1997 scenario at its peak over Curitiba's industrial district; hovering shows 50 cm of water that passed 30 cm at 1h22](docs/cenario-cic.webp)
 
-## What runs in the tab
+## Methods
+
+### Data
 
 ```
 grid           1536 × 1536 cells, 34.5 m each, 53 × 53 km
@@ -223,7 +351,9 @@ second visit opens without downloading it again.
 
 ![The Iguaçu floodplain and the Belém joining it, south-east of the centre, at the peak of the November-1997 scenario, vertical exaggeration 4×](docs/iguacu.webp)
 
-**The hydraulics** are the local inertial formulation of Bates et al. (2010),
+### Hydraulics
+
+The hydraulics are the local inertial formulation of Bates et al. (2010),
 the one inside LISFLOOD-FP, which is what flood researchers actually use for
 this. Water depth per cell, discharge per cell face, Manning friction, a
 time step that adapts to the deepest water (CFL), open boundaries. Rain minus a
@@ -232,7 +362,64 @@ the sum of three parts: a uniform rate, a coarse rain map (gauges, forecast)
 and a moving Gaussian storm cell. Velocity per cell comes from the face
 discharges, and the hazard class from depth and velocity.
 
-**The tests** (`npm test`) run the model on the GPU in headless Chromium, on
+### Terrain preparation
+
+OSM rivers burned into the terrain with an elevation that only goes down (up
+to 10 m of cut); SRTM's false dams breached up to 5 m and the rest filled with
+a minimum slope (priority-flood, Barnes et al. 2014); before every run the
+rivers settle for two hours without rain, and whatever was wet at the start
+doesn't count as flooding. Details and reasons are in [Five
+things](#five-things-that-had-to-be-fixed-before-the-water-went-where-water-goes).
+
+### Rain
+
+- **Design storms:** Curitiba's IDF equation (Fendrich), constant intensity
+  over the chosen duration, the same over the whole region.
+- **Loss:** infiltration plus storm drains, a rate in mm/h taken off the rain
+  in every cell.
+- **The 2025 storm:** 14 gauges, inverse distance squared onto a 32 × 32 grid,
+  spread in time in 15-minute blocks following Simepar's hyetograph.
+- **48-hour forecast:** Open-Meteo, 16 points (4 × 4) of hourly rain,
+  interpolated the same way.
+- **Storm cell:** a Gaussian bell with chosen radius, speed and heading.
+
+### Hazard and exposure
+
+- **Hazard class:** ARR 2019 (Australia), H1 to H6, from depth, velocity and
+  their product; each cell keeps its highest class over the run.
+- **Flooded:** passed 30 cm at some point, outside river channels and lakes
+  and outside what was already wet before the rain.
+- **Places:** 1,716 schools, day-care centres, health units, hospitals, care
+  homes, fire and police stations from OSM; a place counts if the peak passed
+  30 cm in any of the 9 cells around it (the OSM point often lands on a roof).
+- **Streets:** OSM's road network (51,129 ways) becomes metres of street per
+  cell at build time; flooded cells and H2-or-worse cells are summed.
+
+### Spot and neighbourhood analysis
+
+[`scripts/analise-pontos.mjs`](scripts/analise-pontos.mjs) opens the simulator
+in headless Chromium on the GPU and runs four storms (2-, 10- and 100-year in
+one hour, 25-year in three hours), each until two hours after the rain stops.
+Every 5 simulated minutes it reads the depth at the 18 spots of 2025 (maximum
+over a 3 × 3 cell box, excluding what was already wet). At the end it sums,
+per neighbourhood, the area that passed 30 cm, the street km and the places
+reached, and computes the social priority described above. Neighbourhoods with
+less than 0.5 km² inside the grid are left out of the share. Each
+neighbourhood's municipality is the one containing its polygon's centroid. To
+run it again:
+
+```sh
+node scripts/analise-pontos.mjs   # starts its own server; ~6 min, writes docs/analise.json
+```
+
+### Validation
+
+Described in [Checked against a real storm](#checked-against-a-real-storm):
+18 spots, a 9 × 9 cell box, 20 cm, compared with chance.
+
+### Tests
+
+The tests (`npm test`) run the model on the GPU in headless Chromium, on
 small hand-made grids: all the water rained into a closed bowl must be there at
 the end (error under 0.01%), a still lake must stay still, depth never goes
 negative or NaN on rough terrain under heavy rain, and in a sloping channel the
@@ -341,6 +528,7 @@ npm test           # model tests on the GPU (headless Chromium)
 npm run dev        # http://localhost:5173
 npm run data       # re-fetch rivers, boundaries, schools and streets from OSM, rebuild the terrain
 npm run bake       # rebuild only the terrain (public/data/terreno.bin.gz)
+npm run analise    # run the four storms and rebuild docs/analise.json (~6 min, GPU)
 node scripts/fetch-climate.mjs   # rebuild the ERA5 summaries and the forecast snapshot
 ```
 
