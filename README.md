@@ -9,8 +9,13 @@ Niño forming, a second panel puts the next six months of forecast rain and
 heat next to what past El Niños did, and turns a month into starting
 conditions for the flood.
 
-**[Open it](https://zednaked.github.io/cheia/)** · Interface in Portuguese ·
-[Em português](#em-português)
+**[Open it](https://zednaked.github.io/cheia/)** · Nothing to install ·
+Interface in Portuguese · [Leia em português](README.pt-BR.md)
+
+```
+2.4 million cells of water, one shader pass per step, 5.5 ms a step
+81 fps on an integrated laptop GPU, 4 simulated minutes per second
+```
 
 ![A 100-year, one-hour storm over Curitiba, two simulated hours](docs/cheia.webp)
 
@@ -200,29 +205,9 @@ contributors, ODbL. Design storms: the IDF equation for Curitiba by Fendrich.
 
 ---
 
-## Em português
-
-**Simulador de enchentes de Curitiba e Região Metropolitana que roda no
-navegador.** Você escolhe uma chuva (mm/h e duração, ou um cenário da curva IDF
-de Curitiba) e vê a água descer pelo relevo real, encher os rios e transbordar.
-Um ranking mostra os bairros e municípios com mais área alagada.
-
-**[Abrir o simulador](https://zednaked.github.io/cheia/)**
-
-- Relevo SRTM de 30 m, imagem de satélite, rios e bairros do OpenStreetMap.
-- Modelo hidráulico inercial local (o mesmo do LISFLOOD-FP), rodando na GPU.
-- Passe o mouse para ver bairro, altitude, lâmina d'água agora e no pico, e a
-  hora em que a água passou de 30 cm.
-- "Pico da cheia" mostra a mancha máxima da simulação inteira.
-- **Próximos meses (El Niño 2026–27):** chuva e temperatura previstas mês a
-  mês pelo ECMWF (51 membros), comparadas com o normal de 1991 a 2020 e com o
-  que aconteceu nos El Niños fortes desde 1982. Escolha um mês e uma condição
-  ("como em 1997", por exemplo) e o simulador ajusta solo, rios e a força da
-  tempestade antes de rodar. A previsão não tem correção de viés e, no único
-  período que deu para conferir, marcou 42% a mais de chuva que a reanálise.
-
-**Não é previsão e não foi validado contra uma enchente observada.** Serve para
-entender por onde a água escoa e onde ela se acumula primeiro. Em caso de
-chuva forte, siga a Defesa Civil (199) e os alertas por SMS (40199).
+**Em português:** um simulador de enchentes de Curitiba e da RMC que roda no
+navegador. Você escolhe a chuva e vê por onde a água desce no relevo real.
+**[Abrir o simulador](https://zednaked.github.io/cheia/)** ·
+[README completo em português](README.pt-BR.md)
 
 MIT licensed.
