@@ -229,8 +229,19 @@ function scanFill(rings, W, H, set) {
 export function rasterizeAreas(osm, W, H) {
   const list = [...osm.areas.filter((a) => a.l === 8), ...osm.areas.filter((a) => a.l === 10)];
   const ids = new Uint16Array(W * H);
-  list.forEach((a, i) => scanFill(a.rings, W, H, (k) => (ids[k] = i + 1)));
-  const areas = list.map((a) => ({ name: a.n, level: a.l, cells: 0 }));
+  const areas = list.map((a) => ({ name: a.n, level: a.l, cells: 0, muni: a.l === 8 ? a.n : null }));
+  // os municípios vêm antes: o bairro fica com o município que ele mais cobre
+  // (há "Centro" em vários municípios da região)
+  list.forEach((a, i) => {
+    const votes = new Map();
+    scanFill(a.rings, W, H, (k) => {
+      if (a.l === 10 && ids[k] && areas[ids[k] - 1].level === 8) votes.set(ids[k], (votes.get(ids[k]) || 0) + 1);
+      ids[k] = i + 1;
+    });
+    let best = 0;
+    for (const [id, n] of votes) if (n > (votes.get(best) || 0)) best = id;
+    if (best) areas[i].muni = areas[best - 1].name;
+  });
   for (let k = 0; k < W * H; k++) if (ids[k]) areas[ids[k] - 1].cells++;
   return { ids, areas };
 }

@@ -487,7 +487,7 @@ function renderRanking(stats) {
   const top = rows[0].s.max;
   tbl.innerHTML = rows.map((r) => `
     <tr data-i="${r.i}">
-      <td>${esc(r.a.name)}<span class="muni">${r.a.level === 8 ? ' · município' : ''}</span>
+      <td>${esc(r.a.name)}<span class="muni">${r.a.level === 8 ? ' · município' : r.a.muni && r.a.muni !== 'Curitiba' ? ` · ${esc(r.a.muni)}` : ''}</span>
         <div class="bar" style="width:${(100 * r.s.max) / top}%"></div></td>
       <td class="n">${km2(r.s.max, dem.dx).toFixed(2)} km²<br>
         <span class="muni">${Math.round((100 * r.s.max) / r.a.cells)}% · ${r.s.deep.toFixed(1)} m</span></td>
@@ -535,7 +535,7 @@ function renderExposure({ road, roadMain, roadUnsafe }) {
       <dt>Vias principais com mais de 30 cm</dt><dd><b>${km(roadMain)}</b></dd>
       <dt>Ruas perigosas para carro (H2+)</dt><dd><b>${km(roadUnsafe)}</b></dd>` : '');
   $('poi-rank').innerHTML = poiHits.slice(0, 40).map(({ p, hm }, i) => `
-    <tr data-p="${i}"><td>${esc(p.n) || `(${p.k} sem nome)`}<br><span class="muni">${p.k}${ids[p.cell] ? ` · ${esc(areas[ids[p.cell] - 1].name)}` : ''}</span></td>
+    <tr data-p="${i}"><td>${esc(p.n) || `(${p.k} sem nome)`}<br><span class="muni">${p.k}${ids[p.cell] ? ` · ${esc(areas[ids[p.cell] - 1].name)}${areas[ids[p.cell] - 1].muni !== 'Curitiba' && areas[ids[p.cell] - 1].level === 10 ? `, ${esc(areas[ids[p.cell] - 1].muni)}` : ''}` : ''}</span></td>
     <td class="n">${cm(hm)}</td></tr>`).join('');
   const tab = document.querySelector('[data-tab=lugares]');
   tab.textContent = poiHits.length ? `Lugares (${poiHits.length})` : 'Lugares';
@@ -617,7 +617,7 @@ function renderPin() {
   else if (hm > 0.05) big = `Pico de <b>${cm(hm)}</b> até agora, sem passar de 30 cm.`;
   else big = sim.time > 0 ? 'Seco até agora.' : 'Rode a simulação para ver a água chegar aqui.';
   const title = pin.name || a?.name || 'Ponto marcado';
-  const sub = [pin.name && a ? a.name : null, `${dem.bed[k].toFixed(0)} m de altitude`].filter(Boolean).join(' · ');
+  const sub = [pin.name && a ? a.name : null, a?.level === 10 ? a.muni : null, `${dem.bed[k].toFixed(0)} m de altitude`].filter(Boolean).join(' · ');
   $('ponto').innerHTML = `
     <header><div><h3>${esc(title)}</h3><div class="sub">${esc(sub)}</div></div><button class="x" id="pin-x" aria-label="Fechar">✕</button></header>
     <div class="big">${big}</div>
@@ -773,7 +773,7 @@ function updateTip() {
   const a = ids[hit.k] ? areas[ids[hit.k] - 1] : null;
   const h = buf ? buf[hit.k * 4] : 0, hm = buf ? buf[hit.k * 4 + 1] : 0, arr = buf ? buf[hit.k * 4 + 2] : 0;
   const hz = buf ? buf[hit.k * 4 + 3] : 0;
-  tip.innerHTML = `<b>${a ? esc(a.name) : 'fora dos limites'}</b><br>
+  tip.innerHTML = `<b>${a ? esc(a.name) : 'fora dos limites'}</b>${a?.level === 10 && a.muni ? ` <span class="muni">${esc(a.muni)}</span>` : ''}<br>
     Altitude ${dem.bed[hit.k].toFixed(0)} m<br>
     Água agora ${cm(h)} · pico ${cm(hm)}
     ${arr > 0 ? `<br>Passou de 30 cm em ${fmtTime(arr)}` : ''}

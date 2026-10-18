@@ -9,7 +9,7 @@ const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(
 export function setupSearch({ areas, pois, onPick }) {
   const input = $('search'), box = $('search-res');
   const index = [
-    ...areas.map((a) => ({ name: a.name, sub: a.level === 8 ? 'município' : 'bairro', key: norm(a.name), area: a })),
+    ...areas.map((a) => ({ name: a.name, sub: a.level === 8 ? 'município' : `bairro · ${a.muni ?? ''}`, key: norm(a.level === 8 ? a.name : `${a.name} ${a.muni ?? ''}`), area: a })),
     ...pois.filter((p) => p.n).map((p) => ({ name: p.n, sub: p.k, key: norm(p.n), lonlat: p.c })),
   ];
   let results = [], sel = 0, seq = 0;
@@ -35,8 +35,8 @@ export function setupSearch({ areas, pois, onPick }) {
       if (r.key.startsWith(q)) starts.push(r);
       else if (r.key.includes(q)) has.push(r);
     }
-    // bairros e municípios antes dos lugares
-    const rank = (r) => (r.area ? 0 : 1);
+    // municípios, bairros de Curitiba, bairros da região, depois os lugares
+    const rank = (r) => (!r.area ? 3 : r.area.level === 8 ? 0 : r.area.muni === 'Curitiba' ? 1 : 2);
     results = [...starts.sort((a, b) => rank(a) - rank(b)), ...has.sort((a, b) => rank(a) - rank(b))].slice(0, 8);
     if (!results.length) results = [{ name: `Procurar “${input.value.trim()}” como endereço`, sub: 'Enter', geocode: true }];
     show();
