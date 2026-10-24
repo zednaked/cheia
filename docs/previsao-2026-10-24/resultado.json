@@ -1,0 +1,644 @@
+{
+ "geradoEm": "2026-10-24T16:48:01.251Z",
+ "previsao": {
+  "inicio": "2026-10-24T13:00",
+  "horas": 48,
+  "maxTotalMm": 45,
+  "mediaTotalMm": 33.8,
+  "picoMmH": 11.3,
+  "horaPico": "2026-10-25T02:00"
+ },
+ "criterio": {
+  "FLOOD": 0.3,
+  "caixa": "3 × 3 células",
+  "amostra": 300
+ },
+ "pontos": [
+  {
+   "n": "R. Alferes Poli x R. Almirante Gonçalves",
+   "b": "Rebouças",
+   "t30": null,
+   "pico": 0,
+   "tPico": 47329.14243696584,
+   "perigo": 0
+  },
+  {
+   "n": "R. Ângelo Zeni x R. Carlos Pioli",
+   "b": "Bom Retiro",
+   "t30": null,
+   "pico": 0.05,
+   "tPico": 111.97423878443445,
+   "perigo": 0
+  },
+  {
+   "n": "R. Visconde de Nácar x R. Saldanha Marinho",
+   "b": "Centro",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Arnaldo Rudnick",
+   "b": "Novo Mundo",
+   "t30": null,
+   "pico": 0.01,
+   "tPico": 111.97423878443445,
+   "perigo": 0
+  },
+  {
+   "n": "R. Marialva",
+   "b": "Sítio Cercado",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Emílio Nichele",
+   "b": "CIC",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Bandeirantes, 520",
+   "b": "Sítio Cercado",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Dr. Luiz Losso Filho",
+   "b": "Novo Mundo",
+   "t30": null,
+   "pico": 0.3,
+   "tPico": 111.97423878443445,
+   "perigo": 1
+  },
+  {
+   "n": "R. Waldemar Cavanha x R. Raul Pompéia",
+   "b": "Fazendinha",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "Parque Mané Garrincha",
+   "b": "CIC",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Aristóteles da Silva Santos (Rio Belém)",
+   "b": "Boqueirão",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Carlos Essenfelder x R. Cleto da Silva",
+   "b": "Boqueirão",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "Av. Wenceslau Braz x Linha Verde",
+   "b": "Parolin",
+   "t30": null,
+   "pico": 0.16,
+   "tPico": 9025.012845894169,
+   "perigo": 1
+  },
+  {
+   "n": "R. José Hauer x Av. Salgado Filho",
+   "b": "Uberaba",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "Córrego Henry Ford",
+   "b": "Fanny",
+   "t30": null,
+   "pico": 0.15,
+   "tPico": 111.97423878443445,
+   "perigo": 1
+  },
+  {
+   "n": "R. Prof. Porthos Velozo",
+   "b": "Parolin",
+   "t30": null,
+   "pico": 0.05,
+   "tPico": 1192.536760543827,
+   "perigo": 1
+  },
+  {
+   "n": "R. Brigadeiro Franco",
+   "b": "Parolin",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  },
+  {
+   "n": "R. Humberto Cantarelli",
+   "b": "Campo Comprido",
+   "t30": null,
+   "pico": 0,
+   "tPico": 0,
+   "perigo": 0
+  }
+ ],
+ "bairros": [
+  {
+   "n": "Sumidouro",
+   "km2": 0.2,
+   "fracao": 0.055,
+   "ruaKm": 0.4,
+   "lugares": []
+  },
+  {
+   "n": "Santo Inácio",
+   "km2": 0.18,
+   "fracao": 0.052,
+   "ruaKm": 0.3,
+   "lugares": []
+  },
+  {
+   "n": "Varova",
+   "km2": 0.17,
+   "fracao": 0.048,
+   "ruaKm": 1.2,
+   "lugares": []
+  },
+  {
+   "n": "Parque da Fonte",
+   "km2": 0.2,
+   "fracao": 0.036,
+   "ruaKm": 0.4,
+   "lugares": []
+  },
+  {
+   "n": "Augusta",
+   "km2": 0.31,
+   "fracao": 0.036,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Afonso Pena",
+   "km2": 0.11,
+   "fracao": 0.034,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Parque das Águas",
+   "km2": 0.07,
+   "fracao": 0.033,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Jardim Claudia",
+   "km2": 0.04,
+   "fracao": 0.033,
+   "ruaKm": 0.7,
+   "lugares": [
+    {
+     "n": "Escola Municipal Cândido Portinari",
+     "k": "escola",
+     "h": 0.43
+    }
+   ]
+  },
+  {
+   "n": "Cascatinha",
+   "km2": 0.07,
+   "fracao": 0.031,
+   "ruaKm": 0.3,
+   "lugares": [
+    {
+     "n": "Guarda Municipal",
+     "k": "polícia",
+     "h": 0.54
+    }
+   ]
+  },
+  {
+   "n": "Ipê",
+   "km2": 0.22,
+   "fracao": 0.024,
+   "ruaKm": 0.5,
+   "lugares": []
+  },
+  {
+   "n": "Alto Tarumã",
+   "km2": 0.03,
+   "fracao": 0.02,
+   "ruaKm": 0.4,
+   "lugares": []
+  },
+  {
+   "n": "Colônia Rio Grande",
+   "km2": 0.06,
+   "fracao": 0.019,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Uberaba",
+   "km2": 0.27,
+   "fracao": 0.019,
+   "ruaKm": 1.9,
+   "lugares": []
+  },
+  {
+   "n": "Riviera",
+   "km2": 0.04,
+   "fracao": 0.018,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Mercês",
+   "km2": 0.07,
+   "fracao": 0.018,
+   "ruaKm": 0.3,
+   "lugares": []
+  },
+  {
+   "n": "Caximba",
+   "km2": 0.14,
+   "fracao": 0.016,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Cachoeira",
+   "km2": 0.25,
+   "fracao": 0.015,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Jardim Amélia",
+   "km2": 0.08,
+   "fracao": 0.015,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Pineville",
+   "km2": 0.03,
+   "fracao": 0.014,
+   "ruaKm": 0.4,
+   "lugares": []
+  },
+  {
+   "n": "Butiatuvinha",
+   "km2": 0.14,
+   "fracao": 0.013,
+   "ruaKm": 0.7,
+   "lugares": []
+  },
+  {
+   "n": "Alto Boqueirão",
+   "km2": 0.16,
+   "fracao": 0.013,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Cidade Jardim",
+   "km2": 0.03,
+   "fracao": 0.011,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Bigorrilho",
+   "km2": 0.03,
+   "fracao": 0.011,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Colônia Santa Gabriela",
+   "km2": 0.02,
+   "fracao": 0.01,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Campo de Santana",
+   "km2": 0.21,
+   "fracao": 0.009,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Campo do Rio",
+   "km2": 0.06,
+   "fracao": 0.009,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Aristocrata",
+   "km2": 0.02,
+   "fracao": 0.008,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Iguaçu",
+   "km2": 0.04,
+   "fracao": 0.007,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Boqueirão",
+   "km2": 0.07,
+   "fracao": 0.005,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Umbará",
+   "km2": 0.12,
+   "fracao": 0.005,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Atuba, Pinhais",
+   "km2": 0.01,
+   "fracao": 0.005,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Rio Pequeno",
+   "km2": 0.01,
+   "fracao": 0.004,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Alphaville Graciosa",
+   "km2": 0.02,
+   "fracao": 0.004,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Orleans",
+   "km2": 0.02,
+   "fracao": 0.003,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Emiliano Perneta",
+   "km2": 0.01,
+   "fracao": 0.003,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Guaraituba",
+   "km2": 0.01,
+   "fracao": 0.003,
+   "ruaKm": 0.2,
+   "lugares": []
+  },
+  {
+   "n": "Bonfim",
+   "km2": 0.01,
+   "fracao": 0.003,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Industrial I",
+   "km2": 0.04,
+   "fracao": 0.003,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "São Domingos",
+   "km2": 0,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Cristal",
+   "km2": 0,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Ganchinho",
+   "km2": 0.02,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Guarani",
+   "km2": 0,
+   "fracao": 0.002,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Santa Terezinha",
+   "km2": 0,
+   "fracao": 0.002,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Cachoeira",
+   "km2": 0.03,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Centro",
+   "km2": 0,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Cerro Negro",
+   "km2": 0.02,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Conceição dos Túlios",
+   "km2": 0.01,
+   "fracao": 0.002,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Roseira de São Sebastião",
+   "km2": 0.01,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Colônia Antônio Prado",
+   "km2": 0.01,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Roseira",
+   "km2": 0.02,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Colônia Figueiredo",
+   "km2": 0.02,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Colônia Dom Pedro",
+   "km2": 0.03,
+   "fracao": 0.001,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Santa Terezinha",
+   "km2": 0.01,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Campo da Cascavel",
+   "km2": 0.01,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Conceição dos Correas",
+   "km2": 0.01,
+   "fracao": 0.001,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "São Marcos",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Cajuru",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Centro",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": [
+    {
+     "n": "Colégio Estadual do Paraná",
+     "k": "escola",
+     "h": 0.33
+    }
+   ]
+  },
+  {
+   "n": "Pilarzinho",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Avencal",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Murici",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Mauá",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "São Gabriel",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Palmital",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  },
+  {
+   "n": "Rondinha",
+   "km2": 0.01,
+   "fracao": 0,
+   "ruaKm": 0.1,
+   "lugares": []
+  },
+  {
+   "n": "Barra de Santa Rita",
+   "km2": 0,
+   "fracao": 0,
+   "ruaKm": 0,
+   "lugares": []
+  }
+ ]
+}
